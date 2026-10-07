@@ -8,11 +8,3 @@ __pycache__/
 node_modules/
 .DS_Store
 *.zip
-.env
-.env.*
-.venv/
-node_modules/
-__pycache__/
-.DS_Store
-*.zip
-.pytest_cache/

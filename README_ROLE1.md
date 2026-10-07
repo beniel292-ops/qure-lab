@@ -1,6 +1,6 @@
 # QURE Lab — Role 1 (Quantum) package
 
-A four-qubit Qiskit classifier with documented noise settings, readout-error mitigation, seeded repeats and schema-valid export. **Status: implemented, tested, and run on the real LIDC subset (see `README.md` and `docs/TEAM_STATUS.md`).**
+A four-qubit Qiskit classifier with documented noise settings, readout-error mitigation, seeded repeats and schema-valid export. **Status: implemented, tested, and run on both real cohorts (Role 2 CIRDataset primary, LIDC contours replication). See `README.md` and `docs/ROLE2_MERGE.md`.**
 
 ## Run it
 
@@ -10,11 +10,11 @@ A four-qubit Qiskit classifier with documented noise settings, readout-error mit
 
 ```bash
 pip install -r requirements-quantum.txt
-python -m pytest -q tests/                                     # 12 tests
+python -m pytest -q tests/                                     # 15 tests
 python -m src.quantum.run_experiment --fixture --split val     # synthetic smoke test (~25 s)
 python -m src.quantum.run_experiment --fixture --split val --no-entangle    # entanglement ablation
-# real data (after Role 2 delivers):
-python -m src.quantum.run_experiment --features data/features.csv --meta data/features_meta.json --split val
+# real data (Role 2 cohort, delivered):
+python -m src.quantum.run_experiment --features data/role2/features.csv --meta data/role2/features_meta.json --split val --out results/role2
 # final, once, with the frozen model:
 python -m src.quantum.run_experiment --features ... --meta ... --split test --final --model results/models/<file>.json
 ```
