@@ -1,0 +1,40 @@
+{
+  "input_contract_version": "0.1.0",
+  "data_status": "real",
+  "dataset_source": "CIRDataset (Zenodo record 6762573, CC BY 4.0 (Zenodo record); cite original LIDC-IDRI as well); LIDC-IDRI CT patches with expert nodule masks. Prepared by Role 2.",
+  "dataset_version": "CIRDataset_npy_for_cnn.tar.bz2 md5:9444fdeb008d9ef18fbcf99b28798401",
+  "label_definition": "Radiologist suspicion: 1\u20132 low (0), 4\u20135 high (1). NOT pathology-confirmed cancer.",
+  "label_positive_meaning": "high radiologist suspicion (rating 4-5); NOT pathology-confirmed cancer",
+  "feature_names": [
+    "theta_0",
+    "theta_1",
+    "theta_2",
+    "theta_3"
+  ],
+  "feature_sources": [
+    "log_mask_voxels",
+    "mean_stored_intensity",
+    "std_stored_intensity",
+    "bbox_fill_fraction"
+  ],
+  "input_encoding": "precomputed_angles",
+  "preprocessing_version": "role2-pi-sigmoid-train-only-v1",
+  "preprocessing_note": "theta = pi * sigmoid((feature - train_mean) / train_scale) (train-split mean/scale only; angles in (0, pi))",
+  "unit": "One supplied canonical NID=1 patch per included LIDC patient",
+  "split_counts": {
+    "train": 417,
+    "val": 90,
+    "test": 90
+  },
+  "test_labels": "held by Role 2 until models and thresholds are frozen",
+  "role2_status": "Real data baseline completed; quantum model not implemented by Role 2",
+  "limitations": [
+    "Selected clear-rating cases; not representative of all nodules.",
+    "Expert-provided segmentations required, not automated diagnosis from arbitrary CT.",
+    "Stored intensities are preprocessed, not raw HU.",
+    "Voxel-grid size is not physical volume and can depend on resampling.",
+    "Prediction scores are not established calibrated clinical probabilities.",
+    "One validation split; confidence interval is conditional on this split.",
+    "8 alternate-scan identifiers excluded rather than guessing label mappings."
+  ]
+}

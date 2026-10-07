@@ -1,0 +1,53 @@
+{
+  "model_id": "qml4-L2-noent",
+  "param_version": "20261006-164718",
+  "layers": 2,
+  "entangling": false,
+  "theta": [
+    4.501847521980721,
+    1.4297259373357236,
+    3.067003401975427,
+    0.021217457107549614,
+    0.3750823589739073,
+    4.307686613497789,
+    4.936642795225875,
+    6.376779601317072,
+    1.5837998063971614,
+    2.066143259661502,
+    2.997534709766238,
+    1.6044390181811778
+  ],
+  "threshold": 0.49,
+  "train_loss": 0.5651694298697508,
+  "val_loss": 0.504179151688474,
+  "val_balanced_accuracy": 0.8458498023715415,
+  "restarts": [
+    {
+      "restart": 0,
+      "init_seed": 42,
+      "train_loss": 0.5651694298829247,
+      "val_loss": 0.5041800870689932,
+      "nfev": 143
+    },
+    {
+      "restart": 1,
+      "init_seed": 42,
+      "train_loss": 0.5651694298886162,
+      "val_loss": 0.5041822745182161,
+      "nfev": 140
+    },
+    {
+      "restart": 2,
+      "init_seed": 42,
+      "train_loss": 0.5651694298697508,
+      "val_loss": 0.504179151688474,
+      "nfev": 151
+    }
+  ],
+  "optimizer": "scipy COBYLA (rhobeg 0.5)",
+  "maxiter": 200,
+  "seconds": 24.02,
+  "data_status": "real",
+  "trained_on": "noiseless exact simulation (statevector-equivalent)",
+  "encoding": "precomputed_angles"
+}

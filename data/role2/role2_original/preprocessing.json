@@ -1,0 +1,24 @@
+{
+  "features": [
+    "log_mask_voxels",
+    "mean_stored_intensity",
+    "std_stored_intensity",
+    "bbox_fill_fraction"
+  ],
+  "train_mean": [
+    7.606693707610479,
+    1.5526758063611368,
+    0.3241935891391848,
+    0.41482844238887595
+  ],
+  "train_scale": [
+    1.5258418582264768,
+    0.4659275628029967,
+    0.1361231534368263,
+    0.1254572692175222
+  ],
+  "mapping": "theta = pi * sigmoid((feature - train_mean) / train_scale)",
+  "seed": 2026,
+  "target": "0: rating 1\u20132; 1: rating 4\u20135; intermediate ratings excluded",
+  "units": "normalized CT intensity, voxel-grid geometry; not raw HU or physical volume"
+}

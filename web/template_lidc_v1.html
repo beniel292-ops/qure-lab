@@ -1,0 +1,423 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QURE Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: instrument-panel dashboard — case list rail + one measurement sheet; aggregate + method as tabs */
+:root{
+  --bg:#F2F4F6; --surface:#FFFFFF; --sunken:#E8ECF0; --line:#D3DAE1; --ink:#15202B; --muted:#56636F;
+  --accent:#3B4FB8; --noiseless:#15202B; --noisy:#C8432B; --mitig:#2B66C4; --classical:#8A6A12;
+  --warn:#B45F06; --warnbg:#FCEFD9; --ok:#1F7A4D; --okbg:#DDF1E6; --badbg:#F9E2DD;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F151B; --surface:#161E26; --sunken:#1D2730; --line:#2C3843; --ink:#E4EAF0; --muted:#94A3B1;
+  --accent:#8C9CF0; --noiseless:#E4EAF0; --noisy:#F07A60; --mitig:#6FA3F2; --classical:#D2B04E;
+  --warn:#F0A955; --warnbg:#3A2A14; --ok:#5CC892; --okbg:#173326; --badbg:#3A1F1A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F151B; --surface:#161E26; --sunken:#1D2730; --line:#2C3843; --ink:#E4EAF0; --muted:#94A3B1;
+  --accent:#8C9CF0; --noiseless:#E4EAF0; --noisy:#F07A60; --mitig:#6FA3F2; --classical:#D2B04E;
+  --warn:#F0A955; --warnbg:#3A2A14; --ok:#5CC892; --okbg:#173326; --badbg:#3A1F1A; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:20px;padding-block:20px 48px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:30px;font-weight:700;letter-spacing:.01em}
+h2{font-size:20px;font-weight:600}
+h3{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.mono,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+header.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.q{max-width:70ch;color:var(--muted);margin:6px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12px/1 var(--mono);padding:6px 8px;border-radius:4px;background:var(--sunken);color:var(--ink);white-space:nowrap}
+.chip.warn{background:var(--warnbg);color:var(--warn)}
+.chip.ok{background:var(--okbg);color:var(--ok)}
+.chip.bad{background:var(--badbg);color:var(--noisy)}
+nav.tabs{display:flex;gap:4px;margin:16px 0;flex-wrap:wrap}
+nav.tabs button{font:600 14px var(--display);letter-spacing:.03em;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:6px;cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,select:focus-visible,input:focus-visible,.case:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:18px}
+@media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.rail{background:var(--surface);border:1px solid var(--line);border-radius:8px;display:flex;flex-direction:column;max-height:calc(100vh - 140px);position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:860px){.rail{position:static;max-height:320px}}
+.rail .filters{padding:10px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+select{font:14px var(--body);padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);width:100%}
+.list{overflow:auto;flex:1}
+.case{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px}
+.case[aria-current="true"]{background:var(--sunken)}
+.case .id{font-family:var(--mono);font-size:12px;overflow-wrap:anywhere}
+.case .meta{grid-column:1 / -1}
+.case .meta{color:var(--muted);font-size:12px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.sheet{display:grid;gap:16px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;min-width:0}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:980px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+.seg{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.seg button{font:500 13px var(--mono);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 10px;border-radius:5px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.note{font-size:13px;color:var(--muted);max-width:75ch}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font:600 12px var(--display);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+td.num,th.num{text-align:right}
+canvas{width:100%;height:280px;background:var(--sunken);border-radius:6px;display:block;touch-action:none;cursor:grab}
+svg text{fill:var(--ink);font-family:var(--mono);font-size:11px}
+svg .mut{fill:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.stat{border-top:2px solid var(--line);padding-top:6px}
+.stat b{display:block;font:500 18px var(--mono)}
+.stat span{font-size:12px;color:var(--muted)}
+.banner{padding:10px 12px;border-radius:6px;background:var(--warnbg);color:var(--warn);font-size:14px;margin:12px 0}
+pre{font:12px/1.35 var(--mono);background:var(--sunken);padding:12px;border-radius:6px;overflow-x:auto}
+ol,ul{padding-left:20px} li{margin:3px 0}
+details summary{cursor:pointer;font-weight:600}
+footer{margin-top:28px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:10px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>QURE Lab</h1>
+      <p class="q">When noise changes a quantum classifier's answer, can we detect the instability, and does mitigation improve the result enough to justify its cost?</p>
+    </div>
+    <div class="chips" id="statusChips"></div>
+  </header>
+  <div id="fixtureBanner" class="banner" hidden>SYNTHETIC FIXTURE DATA. Development only; not evidence.</div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" id="tab-case" aria-selected="true">Case explorer</button>
+    <button role="tab" id="tab-agg" aria-selected="false">Aggregate results</button>
+    <button role="tab" id="tab-method" aria-selected="false">Method and limits</button>
+  </nav>
+
+  <section id="view-case" class="layout">
+    <aside class="rail">
+      <div class="filters">
+        <label class="note" for="filterSel">Show test cases</label>
+        <select id="filterSel">
+          <option value="all">All test cases</option>
+          <option value="flag">Flagged unstable at this setting</option>
+          <option value="flip">Noisy decision flipped at this setting</option>
+          <option value="wrong">Noiseless model wrong vs label</option>
+          <option value="farther">Mitigation moved score farther away</option>
+        </select>
+        <div class="note" id="listCount"></div>
+      </div>
+      <div class="list" id="caseList" role="listbox" aria-label="Test cases"></div>
+    </aside>
+    <div class="sheet" id="sheet"></div>
+  </section>
+
+  <section id="view-agg" hidden></section>
+  <section id="view-method" hidden></section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+/*__BUNDLE__*/
+(function(){
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const f3 = x => (x===null||x===undefined) ? "—" : Number(x).toFixed(3);
+const pct = x => (x===null||x===undefined) ? "—" : (100*x).toFixed(1)+"%";
+const mean = a => a.reduce((s,x)=>s+x,0)/a.length;
+const sd = a => { const m=mean(a); return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/(a.length-1)); };
+let B, state = {view:"case", setting:"N4", caseId:null, filter:"all"};
+
+function load(){
+  if (window.QURE_BUNDLE) return Promise.resolve(window.QURE_BUNDLE);
+  return fetch("qure_bundle.json").then(r => { if(!r.ok) throw new Error("qure_bundle.json not found next to this page"); return r.json(); });
+}
+load().then(b => { B = b; init(); }).catch(e => {
+  $("#sheet").innerHTML = `<div class="panel"><h2>Could not load results</h2><p class="note">${esc(e.message)}. Run <span class="mono">python tools/build_web_bundle.py</span>, then serve this folder (for example <span class="mono">python -m http.server</span>) or open <span class="mono">qure_lab_standalone.html</span>.</p></div>`;
+});
+
+function init(){
+  const chips = [
+    [B.data_status === "real" ? "Real data: LIDC-IDRI annotations" : "SYNTHETIC FIXTURE", B.data_status === "real" ? "" : "warn"],
+    ["Simulated execution (Qiskit Aer " + B.environment.qiskit_aer + ")", ""],
+    ["Noise: hypothetical sweep", "warn"],
+    [B.split.toUpperCase() + " split · " + B.cases.length + " nodules", ""]];
+  $("#statusChips").innerHTML = chips.map(([t,c]) => `<span class="chip ${c}">${esc(t)}</span>`).join("");
+  $("#fixtureBanner").hidden = B.data_status === "real";
+  $("#foot").innerHTML = `Research prototype for studying quantum-classifier reliability. Labels are radiologist suspicion ratings, not pathology. Not a diagnostic tool. Run <span class="mono">${esc(B.run_id)}</span>.`;
+  const firstFlag = B.cases.find(c => c.settings.N4.flag);
+  state.caseId = (firstFlag || B.cases[0]).id;
+  ["case","agg","method"].forEach(v => $("#tab-"+v).addEventListener("click", () => setView(v)));
+  $("#filterSel").addEventListener("change", e => { state.filter = e.target.value; renderList(); });
+  renderList(); renderCase(); renderAgg(); renderMethod();
+}
+function setView(v){
+  state.view = v;
+  ["case","agg","method"].forEach(k => { $("#tab-"+k).setAttribute("aria-selected", String(k===v)); $("#view-"+k).hidden = k!==v; });
+}
+
+/* ---------------- case list ---------------- */
+function passes(c){
+  const s = c.settings[state.setting];
+  switch(state.filter){
+    case "flag": return s.flag;
+    case "flip": return s.flip_noisy > 0;
+    case "wrong": return (s.noiseless >= B.threshold ? 1 : 0) !== c.label;
+    case "farther": return s.dev_mit > s.dev_noisy;
+    default: return true;
+  }
+}
+function renderList(){
+  const items = B.cases.filter(passes);
+  $("#listCount").textContent = `${items.length} of ${B.cases.length} at ${state.setting}`;
+  $("#caseList").innerHTML = items.map(c => {
+    const s = c.settings[state.setting];
+    const tags = (s.flag ? `<span class="chip warn">flag</span>` : "") ;
+    return `<div class="case" role="option" tabindex="0" data-id="${esc(c.id)}" aria-current="${c.id===state.caseId}">
+      <span class="id">${esc(c.id)}</span>${tags}
+      <span class="meta">label ${c.label ? "high-susp." : "low-susp."} · ref ${f3(s.noiseless)}</span></div>`;
+  }).join("") || `<p class="note" style="padding:10px">No test cases match this filter at ${state.setting}.</p>`;
+  document.querySelectorAll(".case").forEach(el => {
+    const go = () => { state.caseId = el.dataset.id; renderList(); renderCase(); };
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); }});
+  });
+}
+
+/* ---------------- case sheet ---------------- */
+function renderCase(){
+  const c = B.cases.find(x => x.id === state.caseId);
+  const s = c.settings[state.setting];
+  const ns = B.noise_settings.find(n => n.id === state.setting);
+  const decRef = s.noiseless >= B.threshold ? 1 : 0;
+  const cl = c.classical;
+  const segs = B.noise_settings.map(n => `<button aria-pressed="${n.id===state.setting}" data-s="${n.id}">${n.id} · ${esc(n.label)}</button>`).join("");
+  $("#sheet").innerHTML = `
+  <div class="panel">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline">
+      <h2 class="mono" style="font-family:var(--mono);font-size:18px">${esc(c.id)}</h2>
+      <div class="chips">
+        <span class="chip">${c.label ? "Dataset label: high-suspicion" : "Dataset label: low-suspicion"}</span>
+        <span class="chip ${decRef===c.label ? "ok" : "bad"}">Noiseless model ${decRef===c.label ? "agrees with label" : "disagrees with label"}</span>
+        ${s.flag ? `<span class="chip warn">Unstable under tested conditions (rule U)</span>` : `<span class="chip">Not flagged at ${state.setting}</span>`}
+      </div>
+    </div>
+    <p class="note">Label provenance: median malignancy-suspicion rating ${c.median_malignancy} from ${c.n_readers} LIDC readers (scale 1–5; &gt;3 high, &lt;3 low, 3 excluded). Not pathology-confirmed. Patient ${esc(c.patient)}.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Reader-drawn nodule outlines</h3>
+      <canvas id="contour" aria-label="3D point view of reader contours; drag to rotate"></canvas>
+      <p class="note">Contour boundary points in millimetres from ${c.contours.length} readers (one colour per reader), from the LIDC annotation XML. No CT pixels are shown because none were used. Drag to rotate.</p>
+    </div>
+    <div class="panel">
+      <h3>From outline to four qubit angles</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Feature</th><th class="num">Value</th><th class="num">z (train)</th><th class="num">Angle (rad)</th></tr></thead>
+        <tbody>${c.features.names.map((n,i) => `<tr><td>${esc(n)}</td><td class="num">${c.features.raw[i].toFixed(3)}</td><td class="num">${c.features.z[i].toFixed(3)}</td><td class="num">${c.angles[i].toFixed(3)}</td></tr>`).join("")}</tbody>
+      </table></div>
+      <p class="note">Each feature is the mean over readers, standardized with training-split statistics, then encoded as RY(2·arctan z) on its own qubit. Volume is in mm³ (log); compactness is 36πV²/A³; elongation is from contour principal axes (log); flatness is z-extent over in-plane extent.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Execution results</h3>
+    <div class="seg" role="group" aria-label="Noise setting">${segs}</div>
+    <p class="note"><b>Precomputed playback.</b> Each button shows saved runs for one measured noise setting; nothing is simulated live, and no values are interpolated between settings. ${esc(ns.label)}: 1-qubit depolarizing ${ns.p1q}, CX depolarizing ${ns.p2q}, readout P(1|0) ${ns.readout_p10}, P(0|1) ${ns.readout_p01}. Hypothetical values, not hardware calibration.</p>
+    <div class="tablewrap">${strip(c, s)}</div>
+    <div class="stats">
+      <div class="stat"><b>${pct(s.flip_noisy)} → ${pct(s.flip_mit)}</b><span>decision flips vs noiseless, noisy → mitigated (${B.repeats} runs)</span></div>
+      <div class="stat"><b>${f3(s.dev_noisy)} → ${f3(s.dev_mit)}</b><span>|mean − noiseless|, noisy → mitigated</span></div>
+      <div class="stat"><b>${f3(sd(s.noisy))} / ${f3(sd(s.mitigated))}</b><span>run-to-run std, noisy / mitigated</span></div>
+      <div class="stat"><b>${B.budget.shots_per_execution} + ${B.budget.calibration_shots_total}</b><span>shots per mitigated estimate (execution + calibration)</span></div>
+      <div class="stat"><b>${f3(s.noisy_exact)}</b><span>infinite-shot noisy expectation</span></div>
+      <div class="stat"><b>${s.oor ? s.oor + " of " + B.repeats : "0"}</b><span>mitigated runs outside [0, 1] (kept, not clipped)</span></div>
+    </div>
+    <p class="note" style="margin-top:10px">Scores are P(odd parity of the four measured qubits), a raw measurement-derived score, not a probability of the label. Decision threshold ${B.threshold} (chosen on validation). ${c.calibrated !== null ? `A separate calibrated probability (Platt scaling fitted on validation, noiseless score only) is ${f3(c.calibrated)}.` : ""}</p>
+  </div>
+
+  <details class="panel">
+    <summary>State diagnostics (per-qubit Bloch vectors)</summary>
+    <p class="note">These describe each qubit's reduced state, not confidence or reliability. Entanglement alone shortens them without any noise. Readout mitigation does not change the state, so there is no mitigated vector.</p>
+    <div class="tablewrap"><table><thead><tr><th>Qubit</th><th>Noiseless (x, y, z)</th><th class="num">|r|</th><th>Gate-noisy (x, y, z)</th><th class="num">|r|</th></tr></thead><tbody>
+    ${s.bloch_noiseless.map((v,i) => { const w = s.bloch_noisy[i]; const n = a => Math.hypot(...a).toFixed(3);
+      return `<tr><td>q${i}</td><td class="mono">${v.map(x=>x.toFixed(3)).join(", ")}</td><td class="num">${n(v)}</td><td class="mono">${w.map(x=>x.toFixed(3)).join(", ")}</td><td class="num">${n(w)}</td></tr>`; }).join("")}
+    </tbody></table></div>
+  </details>`;
+  document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => { state.setting = b.dataset.s; renderList(); renderCase(); }));
+  drawContour(c);
+}
+
+function strip(c, s){
+  const W = 760, L = 210, R = 24, rowH = 30, x0 = -0.1, x1 = 1.1;
+  const X = v => L + (v - x0) / (x1 - x0) * (W - L - R);
+  const cl = c.classical;
+  const rows = [
+    ["Noiseless reference", [s.noiseless], "var(--noiseless)", "diamond"],
+    [`Noisy (${s.noisy.length} runs)`, s.noisy, "var(--noisy)", "dot"],
+    ["Raw, equal shot budget", null, "var(--noisy)", "band"],
+    [`Mitigated (${s.mitigated.length} runs)`, s.mitigated, "var(--mitig)", "dot"],
+    [cl ? `Classical B1 (threshold ${cl.threshold})` : "Classical B1 (pending)", cl ? [cl.score] : [], "var(--classical)", "square"],
+  ];
+  const H = 30 + rows.length * rowH + 22;
+  let g = "";
+  [0, .25, .5, .75, 1].forEach(t => { g += `<line x1="${X(t)}" x2="${X(t)}" y1="22" y2="${H-22}" stroke="var(--line)"/><text x="${X(t)}" y="${H-6}" text-anchor="middle" class="mut">${t}</text>`; });
+  g += `<line x1="${X(B.threshold)}" x2="${X(B.threshold)}" y1="14" y2="${H-22}" stroke="var(--accent)" stroke-dasharray="4 3"/><text x="${X(B.threshold)}" y="12" text-anchor="middle" style="fill:var(--accent)">threshold ${B.threshold}</text>`;
+  rows.forEach(([lab, vals, col, kind], i) => {
+    const y = 34 + i * rowH;
+    g += `<text x="0" y="${y+4}">${esc(lab)}</text>`;
+    if (kind === "band"){
+      const m = s.eq_mean, d = s.eq_std;
+      g += `<line x1="${X(m-d)}" x2="${X(m+d)}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="2"/><rect x="${X(m)-1.5}" y="${y-7}" width="3" height="14" fill="${col}"/>`;
+      return;
+    }
+    vals.forEach((v, j) => {
+      const x = X(Math.max(x0, Math.min(x1, v)));
+      const jy = y + (vals.length > 1 ? (j - (vals.length-1)/2) * 3 : 0);
+      if (kind === "diamond") g += `<path d="M${x} ${y-7}L${x+7} ${y}L${x} ${y+7}L${x-7} ${y}Z" fill="${col}"/>`;
+      else if (kind === "square") g += `<rect x="${x-5}" y="${y-5}" width="10" height="10" fill="${col}"/>`;
+      else g += `<circle cx="${x}" cy="${jy}" r="4.5" fill="${col}" fill-opacity=".75"/>`;
+    });
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:560px" role="img" aria-label="Scores on a 0 to 1 axis for each execution mode">${g}</svg>`;
+}
+
+function drawContour(c){
+  const cv = $("#contour"); if (!cv) return;
+  const dpr = window.devicePixelRatio || 1, ctx = cv.getContext("2d");
+  const pts = c.contours.flatMap((rd, k) => rd.map(p => [p[0], p[1], p[2], k]));
+  if (!pts.length){ return; }
+  const m = [0,1,2].map(i => mean(pts.map(p => p[i])));
+  const P = pts.map(p => [p[0]-m[0], p[1]-m[1], p[2]-m[2], p[3]]);
+  const ext = Math.max(...P.map(p => Math.hypot(p[0],p[1],p[2]))) || 1;
+  const cs = getComputedStyle(document.documentElement);
+  const cols = ["--mitig","--noisy","--classical","--accent","--ok"].map(v => cs.getPropertyValue(v).trim());
+  let yaw = 0.6, pitch = -0.5, drag = null;
+  function draw(){
+    const w = cv.clientWidth, h = cv.clientHeight; cv.width = w*dpr; cv.height = h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);
+    const s = 0.42 * Math.min(w,h) / ext, cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    P.forEach(p => {
+      const x1 = p[0]*cy - p[1]*sy, y1 = p[0]*sy + p[1]*cy;
+      const y2 = y1*cp - p[2]*sp;
+      ctx.fillStyle = cols[p[3] % cols.length]; ctx.globalAlpha = .55;
+      ctx.fillRect(w/2 + x1*s - 1.2, h/2 + y2*s - 1.2, 2.4, 2.4);
+    });
+    ctx.globalAlpha = 1; ctx.fillStyle = cs.getPropertyValue("--muted").trim(); ctx.font = "11px " + cs.getPropertyValue("--mono");
+    ctx.fillText(`${(2*ext).toFixed(1)} mm across`, 10, h - 10);
+  }
+  cv.onpointerdown = e => { drag = [e.clientX, e.clientY]; cv.setPointerCapture(e.pointerId); };
+  cv.onpointermove = e => { if(!drag) return; yaw += (e.clientX-drag[0])*0.01; pitch += (e.clientY-drag[1])*0.01; drag = [e.clientX, e.clientY]; draw(); };
+  cv.onpointerup = () => drag = null;
+  draw(); window.addEventListener("resize", draw, {once:true});
+}
+
+/* ---------------- aggregate ---------------- */
+function lineChart(series, ylab, ymin, ymax, hline){
+  const W = 560, H = 240, L = 46, R = 16, T = 14, Bm = 30;
+  const xs = B.noise_settings.map(n => n.id);
+  const X = i => L + i * (W - L - R) / (xs.length - 1), Y = v => T + (1 - (v - ymin) / (ymax - ymin)) * (H - T - Bm);
+  let g = "";
+  for (let k = 0; k <= 4; k++){ const v = ymin + k*(ymax-ymin)/4; g += `<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end" class="mut">${v.toFixed(2)}</text>`; }
+  xs.forEach((x,i) => g += `<text x="${X(i)}" y="${H-10}" text-anchor="middle" class="mut">${x}</text>`);
+  if (hline){ g += `<line x1="${L}" x2="${W-R}" y1="${Y(hline.v)}" y2="${Y(hline.v)}" stroke="var(--classical)" stroke-width="1.5" stroke-dasharray="2 4"/>`; }
+  series.forEach(s => {
+    g += `<polyline fill="none" stroke="${s.col}" stroke-width="2" ${s.dash ? 'stroke-dasharray="5 4"' : ""} points="${s.v.map((v,i)=>`${X(i)},${Y(v)}`).join(" ")}"/>`;
+    s.v.forEach((v,i) => g += `<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="${s.col}"/>`);
+  });
+  const legend = series.map(s => `<span><span class="dot" style="background:${s.col}"></span>${esc(s.name)}</span>`).join(" &nbsp; ") + (hline ? ` &nbsp; <span><span class="dot" style="background:var(--classical)"></span>${esc(hline.label)} (dotted)</span>` : "");
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(ylab)} by noise setting">${g}</svg><div class="note">${legend}</div>`;
+}
+function renderAgg(){
+  const S = B.summary, qt = S.quantum_test, rel = S.quantum_reliability_test, ct = S.classical_test;
+  const b1 = ct.B1_logreg_4feat.balanced_accuracy;
+  const lo = Math.min(...qt.flatMap(r => [r.noisy_mean.balanced_accuracy, r.mitigated_mean.balanced_accuracy]), b1) - 0.05;
+  const ab = S.ablation_no_entanglement_test ? S.ablation_no_entanglement_test[0].noiseless.balanced_accuracy : null;
+  const rowsQ = qt.map(r => `<tr><td>${r.setting_id} · ${esc(r.label)}</td>
+    <td class="num">${r.noiseless.balanced_accuracy.toFixed(3)}</td><td class="num">${r.noisy_mean.balanced_accuracy.toFixed(3)}</td>
+    <td class="num">${r.mitigated_mean.balanced_accuracy.toFixed(3)}</td><td class="num">[${r.mitigated_mean.ba_ci95.join(", ")}]</td>
+    <td class="num">${r.mitigated_mean.sensitivity.toFixed(3)} / ${r.mitigated_mean.specificity.toFixed(3)}</td></tr>`).join("");
+  const rowsC = Object.entries(ct).map(([k,v]) => `<tr><td>${esc(k)}</td><td class="num">${v.balanced_accuracy.toFixed(3)}</td><td class="num">[${v.ba_ci95.join(", ")}]</td><td class="num">${v.sensitivity.toFixed(3)} / ${v.specificity.toFixed(3)}</td><td class="num">${v.auc.toFixed(3)}</td><td class="num">${v.brier.toFixed(3)}</td><td>${esc(v.note)}</td></tr>`).join("");
+  const rowsR = rel.map(r => `<tr><td>${r.setting_id}</td><td class="num">${r.mean_abs_dev_noisy.toFixed(4)}</td><td class="num">${r.mean_abs_dev_mitigated.toFixed(4)}</td><td class="num">${pct(r.mean_flip_rate_noisy)}</td><td class="num">${pct(r.mean_flip_rate_mitigated)}</td><td class="num">${r.mean_std_noisy.toFixed(4)}</td><td class="num">${r.mean_std_mitigated.toFixed(4)}</td><td class="num">${r.mean_std_noisy_equal_budget.toFixed(4)}</td><td class="num">${pct(r.frac_cases_mitigation_farther)}</td><td class="num">${r.score_out_of_range_repeats_total}</td></tr>`).join("");
+  const rowsU = S.instability_test.map(r => `<tr><td>${r.setting_id}</td><td class="num">${pct(r.flag_rate)}</td><td class="num">${r.unstable_cases}</td><td class="num">${r.flag_recall_of_unstable===null?"—":pct(r.flag_recall_of_unstable)}</td><td class="num">${r.flag_precision===null?"—":pct(r.flag_precision)}</td><td class="num">${r.label_error_rate_flagged===null?"—":pct(r.label_error_rate_flagged)}</td><td class="num">${pct(r.label_error_rate_retained)}</td></tr>`).join("");
+  const rowsCal = S.calibration.reliability_bins_test.map(r => `<tr><td>${r.bin[0]}–${r.bin[1]}</td><td class="num">${r.n}</td><td class="num">${r.mean_predicted.toFixed(3)}</td><td class="num">${r.observed_rate.toFixed(3)}</td></tr>`).join("");
+  $("#view-agg").innerHTML = `
+  <div class="sheet">
+    <div class="panel">
+      <h2>Test-split results (${B.cases.length} nodules, run once with frozen settings)</h2>
+      <p class="note">Every number on this tab comes from the saved test run and the final summary file. Confidence intervals are 95% case-level bootstrap; nodules from the same patient are correlated, so the intervals are somewhat optimistic.</p>
+      <div class="grid2">
+        <div>${lineChart([
+          {name:"Noiseless reference", v: qt.map(r=>r.noiseless.balanced_accuracy), col:"var(--noiseless)", dash:true},
+          {name:"Noisy (mean of runs)", v: qt.map(r=>r.noisy_mean.balanced_accuracy), col:"var(--noisy)"},
+          {name:"Mitigated (mean of runs)", v: qt.map(r=>r.mitigated_mean.balanced_accuracy), col:"var(--mitig)"}],
+          "Balanced accuracy", Math.max(0.5, Math.floor(lo*20)/20), 1.0, {v:b1, label:`logistic regression, same 4 features: ${b1.toFixed(3)}`})}
+          <p class="note"><b>Balanced accuracy vs noise setting.</b> The quantum model is in the same range as the classical baseline; no advantage is claimed.</p></div>
+        <div>${lineChart([
+          {name:"Noisy", v: rel.map(r=>r.mean_abs_dev_noisy), col:"var(--noisy)"},
+          {name:"Mitigated", v: rel.map(r=>r.mean_abs_dev_mitigated), col:"var(--mitig)"}],
+          "Mean deviation", 0, Math.ceil(Math.max(...rel.map(r=>r.mean_abs_dev_noisy))*20)/20 || 0.05, null)}
+          <p class="note"><b>Mean |score − noiseless score|.</b> Readout mitigation removes most readout-driven deviation but not gate-noise deviation (N2).</p></div>
+      </div>
+    </div>
+    <div class="panel"><h3>Quantum classifier, test split</h3><div class="tablewrap"><table>
+      <thead><tr><th>Setting</th><th class="num">Noiseless BA</th><th class="num">Noisy BA</th><th class="num">Mitigated BA</th><th class="num">Mitigated 95% CI</th><th class="num">Mitigated sens / spec</th></tr></thead><tbody>${rowsQ}</tbody></table></div>
+      ${ab !== null ? `<p class="note">Ablation: the same circuit without entangling gates reaches noiseless test balanced accuracy ${ab.toFixed(3)}. With this parity readout, entanglement is needed for the features to interact. A different readout could narrow this gap.</p>` : ""}</div>
+    <div class="panel"><h3>Classical baselines, same patient splits</h3><div class="tablewrap"><table>
+      <thead><tr><th>Model</th><th class="num">BA</th><th class="num">95% CI</th><th class="num">Sens / spec</th><th class="num">AUC</th><th class="num">Brier</th><th>Note</th></tr></thead><tbody>${rowsC}</tbody></table></div></div>
+    <div class="panel"><h3>Noise and mitigation cost</h3><div class="tablewrap"><table>
+      <thead><tr><th>Setting</th><th class="num">Dev. noisy</th><th class="num">Dev. mitigated</th><th class="num">Flips noisy</th><th class="num">Flips mitigated</th><th class="num">Std noisy</th><th class="num">Std mitigated</th><th class="num">Std raw, equal budget</th><th class="num">Mitig. farther</th><th class="num">Out of [0,1]</th></tr></thead><tbody>${rowsR}</tbody></table></div>
+      <p class="note">Mitigation costs ${B.budget.calibration_shots_total} calibration shots per repeat on top of ${B.budget.shots_per_execution} execution shots. It reduces bias but roughly doubles run-to-run spread, and a raw estimate with the same total shots has the lowest spread of all.</p></div>
+    <div class="panel"><h3>Instability rule U on the test split</h3><p class="note">${esc(B.instability_rule)}. The rule was fixed before the test run and uses only quantities a hardware user could observe. "Unstable" ground truth means at least one noisy run changed the noiseless decision, which is known only in simulation. Counts are small, so treat the rates as indicative.</p>
+      <div class="tablewrap"><table><thead><tr><th>Setting</th><th class="num">Flag rate</th><th class="num">Unstable cases</th><th class="num">Recall of unstable</th><th class="num">Precision</th><th class="num">Label error, flagged</th><th class="num">Label error, retained</th></tr></thead><tbody>${rowsU}</tbody></table></div></div>
+    <div class="panel"><h3>Calibration of the noiseless score (test)</h3><p class="note">${esc(S.calibration.method)}, fitted on ${esc(S.calibration.fitted_on)}. Test Brier score ${S.calibration.test_brier_calibrated}. Brier mixes calibration and discrimination; the reliability table shows calibration directly.</p>
+      <div class="tablewrap"><table><thead><tr><th>Predicted bin</th><th class="num">Cases</th><th class="num">Mean predicted</th><th class="num">Observed rate</th></tr></thead><tbody>${rowsCal}</tbody></table></div></div>
+  </div>`;
+}
+
+/* ---------------- method ---------------- */
+function renderMethod(){
+  const d = B.dataset, sc = d.split_counts;
+  const rowsN = B.noise_settings.map(n => `<tr><td>${n.id}</td><td>${esc(n.label)}</td><td class="num">${n.p1q}</td><td class="num">${n.p2q}</td><td class="num">${n.readout_p10}</td><td class="num">${n.readout_p01}</td></tr>`).join("");
+  $("#view-method").innerHTML = `
+  <div class="sheet">
+    <div class="panel"><h2>Pipeline</h2><ol>
+      <li>LIDC-IDRI radiologist annotations (pylidc database): nodules seen by at least 3 readers, median suspicion rating ≠ 3.</li>
+      <li>Patient-level split: ${Object.entries(sc).map(([k,v]) => `${k} ${v.nodules} nodules / ${v.patients} patients`).join(", ")}.</li>
+      <li>Four geometric features from reader contours, standardized with training statistics.</li>
+      <li>Angle encoding, then a 4-qubit circuit with ${B.circuit.n_trainable_params} trainable RY angles and ${B.circuit.transpiled_ops.cx || 0} CX gates (transpiled depth ${B.circuit.transpiled_depth}).</li>
+      <li>Parameters trained noiselessly with COBYLA on train, then frozen. Restart and threshold chosen on validation.</li>
+      <li>Execution under five noise settings, ${B.repeats} seeded runs each. Readout mitigation with fresh calibration every run.</li>
+      <li>Comparison with classical baselines on the same splits; the test split was run once.</li></ol></div>
+    <div class="panel"><h3>Circuit</h3><pre>${esc(B.circuit.text_drawing)}</pre><p class="note">Output: ${esc(B.circuit.output)}. Basis gates ${B.circuit.basis_gates.join(", ")}.</p></div>
+    <div class="panel"><h3>Noise settings (${esc(B.noise_source)})</h3><div class="tablewrap"><table><thead><tr><th>ID</th><th>Label</th><th class="num">1q depol.</th><th class="num">CX depol.</th><th class="num">P(1|0)</th><th class="num">P(0|1)</th></tr></thead><tbody>${rowsN}</tbody></table></div>
+      <p class="note">Mitigation: ${esc(B.mitigation.method)}. Targets ${esc(B.mitigation.targets)}. ${esc(B.mitigation.nonphysical_policy)}. ${esc(B.mitigation.calibration_prep_caveat)}.</p></div>
+    <div class="panel"><h3>Data and labels</h3><dl class="kv">
+      <dt>Source</dt><dd>${esc(d.dataset_source)}</dd><dt>Label</dt><dd>${esc(d.label_definition)}</dd>
+      <dt>Positive means</dt><dd>${esc(d.label_positive_meaning)}</dd><dt>Excluded</dt><dd class="mono">${esc(JSON.stringify(d.excluded_counts))}</dd>
+      <dt>Features</dt><dd>${esc(d.preprocessing_note)}</dd></dl></div>
+    <div class="panel"><h3>Limitations</h3><ul>
+      ${d.caveats.map(x => `<li>${esc(x)}</li>`).join("")}
+      <li>All quantum results are simulated. Noise settings are hypothetical, not taken from a real device.</li>
+      <li>Readout mitigation does not address gate noise, and it adds variance. No error correction is used.</li>
+      <li>The raw score is not a probability; only the separately calibrated noiseless value is.</li>
+      <li>The quantum model performs in the same range as simple classical models. No quantum advantage is claimed.</li>
+      <li>This is a research tool for studying model reliability, not a clinical or diagnostic system.</li></ul></div>
+    <div class="panel"><h3>Sources</h3><ul>
+      <li><a href="https://www.cancerimagingarchive.net/collection/lidc-idri/">LIDC-IDRI collection (TCIA)</a></li>
+      <li><a href="https://pylidc.github.io/">pylidc</a></li>
+      <li><a href="https://arxiv.org/abs/1612.02058">Temme, Bravyi, Gambetta: Error mitigation for short-depth quantum circuits</a></li>
+      <li><a href="https://quantum.cloud.ibm.com/docs/en/guides/error-mitigation-and-suppression-techniques">IBM Quantum: error mitigation and suppression techniques</a></li>
+      <li><a href="https://www.ibm.com/quantum/blog/quantum-error-suppression-mitigation-correction">IBM: suppression, mitigation and correction</a></li>
+      <li><a href="https://scikit-learn.org/stable/modules/calibration.html">scikit-learn: probability calibration</a></li></ul></div>
+  </div>`;
+}
+})();
+</script>

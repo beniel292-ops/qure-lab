@@ -1,0 +1,8 @@
+{
+  "metric": "balanced_accuracy",
+  "method": "1000 class-stratified bootstrap draws; patients unique in validation",
+  "interval_95": [
+    0.7300642292490118,
+    0.8873641304347826
+  ]
+}

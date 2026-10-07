@@ -1,0 +1,79 @@
+{
+  "input_contract_version": "0.1.0",
+  "data_status": "real",
+  "dataset_source": "LIDC-IDRI radiologist annotations (XML-derived) via the pylidc 0.2.3 bundled database; https://www.cancerimagingarchive.net/collection/lidc-idri/ (CC BY 3.0)",
+  "dataset_version": "pylidc 0.2.3 annotation DB; no CT pixel data used",
+  "label_definition": "median of >=3 readers' malignancy ratings (1-5): >3 -> 1, <3 -> 0, ==3 excluded",
+  "label_positive_meaning": "radiologist high-suspicion category in LIDC-IDRI (NOT pathology-confirmed)",
+  "feature_names": [
+    "log_volume",
+    "compactness",
+    "log_elongation",
+    "flatness"
+  ],
+  "preprocessing_version": "lidc-geom-v1",
+  "preprocessing_note": "Per-nodule mean over readers of contour-derived geometry: log volume (mm^3), compactness 36*pi*V^2/A^3, log elongation sqrt(lambda_max/lambda_min) of contour points in mm, flatness = z-extent / max in-plane extent. Features pre-specified before label inspection. z-scored with train-split statistics only.",
+  "inclusion": "nodules clustered by pylidc with >= 3 readers; median malignancy != 3",
+  "excluded_counts": {
+    "fewer_than_3_readers": 1259,
+    "median_rating_3": 513,
+    "geometry_error": 0
+  },
+  "split_method": "patient-level random split 60/20/20, seed 2026",
+  "split_counts": {
+    "train": {
+      "nodules": 505,
+      "patients": 321,
+      "label_1": 254,
+      "label_0": 251
+    },
+    "val": {
+      "nodules": 191,
+      "patients": 107,
+      "label_1": 82,
+      "label_0": 109
+    },
+    "test": {
+      "nodules": 183,
+      "patients": 107,
+      "label_1": 94,
+      "label_0": 89
+    }
+  },
+  "train_standardization": {
+    "log_volume": {
+      "mean": 5.977449902859817,
+      "std": 1.447403181051381
+    },
+    "compactness": {
+      "mean": 0.5914574799833158,
+      "std": 0.35925534486056104
+    },
+    "log_elongation": {
+      "mean": 0.8268325552931592,
+      "std": 1.6087259991246545
+    },
+    "flatness": {
+      "mean": 0.7681410078480321,
+      "std": 0.21342232185155058
+    },
+    "log_diameter": {
+      "mean": 2.4635275569385087,
+      "std": 0.5262628939331085
+    },
+    "log_surface_area": {
+      "mean": 5.824622227303596,
+      "std": 1.0930069598019458
+    },
+    "n_slices": {
+      "mean": 7.196991984912778,
+      "std": 5.286788291704556
+    }
+  },
+  "caveats": [
+    "Features come from reader-drawn contours: they are radiologist-derived geometry, not raw image measurements.",
+    "Labels are suspicion ratings by the same readers; not biopsy/pathology.",
+    "Nodules < 3 mm and nodules seen by fewer than 3 readers are excluded, so the sample is not the full population."
+  ],
+  "built_seconds": 223.9
+}

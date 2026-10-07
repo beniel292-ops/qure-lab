@@ -1,0 +1,10 @@
+# Role 1 (quantum) — tested with qiskit 2.5.2, qiskit-aer 0.17.2, scipy 1.18.1, numpy 2.5.3, Python 3.13
+qiskit>=2.1,<3
+qiskit-aer>=0.17
+numpy
+scipy
+pandas
+matplotlib
+jsonschema
+pytest
+reportlab        # research report PDF (tools/build_report.py)

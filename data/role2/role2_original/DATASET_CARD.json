@@ -1,0 +1,74 @@
+{
+  "project": "QURE Lab",
+  "status": "Real data baseline completed; quantum model not implemented by Role 2",
+  "source": "https://zenodo.org/records/6762573",
+  "source_license": "CC BY 4.0 (Zenodo record); cite original LIDC-IDRI as well",
+  "archive": "CIRDataset_npy_for_cnn.tar.bz2",
+  "archive_md5": "md5:9444fdeb008d9ef18fbcf99b28798401",
+  "source_repo_tree": "f80eab7321eaf40b71f9049653ce4ca630b5cee4",
+  "unit": "One supplied canonical NID=1 patch per included LIDC patient",
+  "target": "Radiologist suspicion: 1\u20132 low (0), 4\u20135 high (1). NOT pathology-confirmed cancer.",
+  "included_patients": 597,
+  "classes": {
+    "0": 302,
+    "1": 295
+  },
+  "excluded_rating_3": 263,
+  "excluded_rating_0": 15,
+  "excluded_alternate_scan_names": [
+    [
+      "LIDC-IDRI-0132-1_1_iso0.55__s_0_CT.npy",
+      "noncanonical_or_augmented"
+    ],
+    [
+      "LIDC-IDRI-0151-1_1_iso0.61__s_0_CT.npy",
+      "noncanonical_or_augmented"
+    ],
+    [
+      "LIDC-IDRI-0315-1_1_iso0.79__s_0_CT.npy",
+      "noncanonical_or_augmented"
+    ],
+    [
+      "LIDC-IDRI-0332-1_1_iso0.64__s_0_CT.npy",
+      "noncanonical_or_augmented"
+    ],
+    [
+      "LIDC-IDRI-0355-1_1_iso0.61__s_0_CT.npy",
+      "noncanonical_or_augmented"
+    ],
+    [
+      "LIDC-IDRI-0365-1_1_iso0.64__s_0_CT.npy",
+      "noncanonical_or_augmented"
+    ],
+    [
+      "LIDC-IDRI-0442-1_1_iso0.59__s_0_CT.npy",
+      "noncanonical_or_augmented"
+    ],
+    [
+      "LIDC-IDRI-0484-1_1_iso0.71__s_0_CT.npy",
+      "noncanonical_or_augmented"
+    ]
+  ],
+  "excluded_lungx_patches": 83,
+  "split_counts": {
+    "train": 417,
+    "validation": 90,
+    "test": 90
+  },
+  "features": [
+    "log_mask_voxels",
+    "mean_stored_intensity",
+    "std_stored_intensity",
+    "bbox_fill_fraction"
+  ],
+  "test_performance": "Not evaluated",
+  "limitations": [
+    "Selected clear-rating cases; not representative of all nodules.",
+    "Expert-provided segmentations required, not automated diagnosis from arbitrary CT.",
+    "Stored intensities are preprocessed, not raw HU.",
+    "Voxel-grid size is not physical volume and can depend on resampling.",
+    "Prediction scores are not established calibrated clinical probabilities.",
+    "One validation split; confidence interval is conditional on this split.",
+    "8 alternate-scan identifiers excluded rather than guessing label mappings."
+  ]
+}

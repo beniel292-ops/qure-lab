@@ -1,0 +1,7 @@
+{
+  "name": "qure-lab-site",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": { "dev": "node dev_server.js", "test": "node --test test_ask.js" }
+}

@@ -1,0 +1,38 @@
+{
+  "logistic_regression": {
+    "n": 90,
+    "balanced_accuracy": 0.8102766798418972,
+    "sensitivity": 0.7727272727272727,
+    "specificity": 0.8478260869565217,
+    "roc_auc": 0.8967391304347826,
+    "brier_score": 0.13177920287400638,
+    "confusion_matrix": [
+      [
+        39,
+        7
+      ],
+      [
+        10,
+        34
+      ]
+    ]
+  },
+  "dummy_prior": {
+    "n": 90,
+    "balanced_accuracy": 0.5,
+    "sensitivity": 0.0,
+    "specificity": 1.0,
+    "roc_auc": 0.5,
+    "brier_score": 0.24990271571711456,
+    "confusion_matrix": [
+      [
+        46,
+        0
+      ],
+      [
+        44,
+        0
+      ]
+    ]
+  }
+}

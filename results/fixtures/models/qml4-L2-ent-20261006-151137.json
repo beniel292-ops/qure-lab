@@ -1,0 +1,52 @@
+{
+  "model_id": "qml4-L2-ent",
+  "param_version": "20261006-151137",
+  "layers": 2,
+  "entangling": true,
+  "theta": [
+    5.806281152855894,
+    2.5420139894777223,
+    2.719685184335094,
+    0.5622190195738721,
+    0.49196593455525983,
+    3.303550940816359,
+    5.024895541660221,
+    6.2633047069283325,
+    1.9864381319027904,
+    3.07445908633608,
+    3.23915401378197,
+    1.3876818071981303
+  ],
+  "threshold": 0.45,
+  "train_loss": 0.4037843005303709,
+  "val_loss": 0.43226391035131395,
+  "val_balanced_accuracy": 0.8681159420289855,
+  "restarts": [
+    {
+      "restart": 0,
+      "init_seed": 42,
+      "train_loss": 0.4139055965249669,
+      "val_loss": 0.43455784768669947,
+      "nfev": 200
+    },
+    {
+      "restart": 1,
+      "init_seed": 42,
+      "train_loss": 0.36803071306154456,
+      "val_loss": 0.4373418418439633,
+      "nfev": 200
+    },
+    {
+      "restart": 2,
+      "init_seed": 42,
+      "train_loss": 0.4037843005303709,
+      "val_loss": 0.43226391035131395,
+      "nfev": 200
+    }
+  ],
+  "optimizer": "scipy COBYLA (rhobeg 0.5)",
+  "maxiter": 200,
+  "seconds": 5.13,
+  "data_status": "synthetic-fixture",
+  "trained_on": "noiseless exact simulation (statevector-equivalent)"
+}

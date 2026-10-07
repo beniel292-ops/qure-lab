@@ -1,0 +1,4152 @@
+{
+ "split": "test",
+ "metrics": {
+  "B1_logreg_4feat": {
+   "n": 183,
+   "threshold": 0.43,
+   "balanced_accuracy": 0.8519,
+   "sensitivity": 0.8723,
+   "specificity": 0.8315,
+   "confusion_matrix": {
+    "tn": 74,
+    "fp": 15,
+    "fn": 12,
+    "tp": 82
+   },
+   "auc": 0.919,
+   "brier": 0.1096,
+   "ba_ci95": [
+    0.8022,
+    0.9008
+   ],
+   "features": [
+    "z_log_volume",
+    "z_compactness",
+    "z_log_elongation",
+    "z_flatness"
+   ],
+   "note": "same 4 features as quantum",
+   "split": "test",
+   "threshold_source": "validation"
+  },
+  "B2_svm_rbf_4feat": {
+   "n": 183,
+   "threshold": 0.7,
+   "balanced_accuracy": 0.8484,
+   "sensitivity": 0.7979,
+   "specificity": 0.8989,
+   "confusion_matrix": {
+    "tn": 80,
+    "fp": 9,
+    "fn": 19,
+    "tp": 75
+   },
+   "auc": 0.8953,
+   "brier": 0.1132,
+   "ba_ci95": [
+    0.7999,
+    0.8996
+   ],
+   "features": [
+    "z_log_volume",
+    "z_compactness",
+    "z_log_elongation",
+    "z_flatness"
+   ],
+   "note": "same 4 features as quantum",
+   "split": "test",
+   "threshold_source": "validation"
+  },
+  "B3_gboost_7geom": {
+   "n": 183,
+   "threshold": 0.6,
+   "balanced_accuracy": 0.8259,
+   "sensitivity": 0.7979,
+   "specificity": 0.8539,
+   "confusion_matrix": {
+    "tn": 76,
+    "fp": 13,
+    "fn": 19,
+    "tp": 75
+   },
+   "auc": 0.9065,
+   "brier": 0.1208,
+   "ba_ci95": [
+    0.7744,
+    0.879
+   ],
+   "features": [
+    "z_log_volume",
+    "z_compactness",
+    "z_log_elongation",
+    "z_flatness",
+    "z_log_diameter",
+    "z_log_surface_area",
+    "z_n_slices"
+   ],
+   "note": "fuller geometric set (7); stronger classical reference",
+   "split": "test",
+   "threshold_source": "validation"
+  },
+  "R1_logreg_reader_ratings": {
+   "n": 183,
+   "threshold": 0.5,
+   "balanced_accuracy": 0.8416,
+   "sensitivity": 0.8404,
+   "specificity": 0.8427,
+   "confusion_matrix": {
+    "tn": 75,
+    "fp": 14,
+    "fn": 15,
+    "tp": 79
+   },
+   "auc": 0.9417,
+   "brier": 0.0933,
+   "ba_ci95": [
+    0.7869,
+    0.8932
+   ],
+   "features": [
+    "rating_subtlety",
+    "rating_internalStructure",
+    "rating_calcification",
+    "rating_sphericity",
+    "rating_margin",
+    "rating_lobulation",
+    "rating_spiculation",
+    "rating_texture"
+   ],
+   "note": "REFERENCE ONLY: reader semantic ratings, same readers as the label (not fair)",
+   "split": "test",
+   "threshold_source": "validation"
+  }
+ },
+ "per_case": {
+  "LIDC-IDRI-0010-S21-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.319472,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.173548,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.244213,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.682995,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0012-S23-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.02977,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.067969,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.02033,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.038415,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0012-S23-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.766111,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.83673,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.975608,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.58913,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0012-S23-N8": {
+   "B1_logreg_4feat": {
+    "score": 0.120229,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.139569,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.050774,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.242543,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0042-S53-N8": {
+   "B1_logreg_4feat": {
+    "score": 0.028414,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.061426,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.010624,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.112563,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0046-S57-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.10077,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.059288,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.014978,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.096495,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0056-S67-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.021474,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.081962,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.01102,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.036354,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0056-S67-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.037984,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.07395,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.01102,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000331,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0058-S69-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.998746,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.905519,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.986951,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.991739,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0058-S69-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.996629,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.942999,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.988136,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.972809,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0064-S75-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.982844,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.954758,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.985946,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.983662,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0073-S83-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.988877,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.969612,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.989049,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.833917,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0092-S100-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.09308,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.077932,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.008025,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000266,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0092-S100-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.010971,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.109017,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.010544,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000266,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0093-S101-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.260707,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.23837,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.520749,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.036354,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0094-S102-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.997946,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.915916,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.993839,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.57535,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0099-S107-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.243903,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.22193,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.248907,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.045293,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0139-S142-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.999159,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.852931,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.948894,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.949467,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0139-S142-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.97892,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.958651,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.985281,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.949467,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0148-S151-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.857605,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.930955,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.939944,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.98806,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0148-S151-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.955907,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.967817,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.964486,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.951587,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0151-S10-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.483641,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.669431,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.573306,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.995242,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0151-S153-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.831444,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.928193,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.97023,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.990362,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0154-S11-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.98748,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.942642,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.980858,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.783539,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0164-S165-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.329005,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.264967,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.208664,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.450346,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0164-S165-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.839124,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.869936,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.974379,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.926877,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0164-S165-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.05395,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.080011,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.05518,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.112563,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0164-S165-N10": {
+   "B1_logreg_4feat": {
+    "score": 0.655219,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.805634,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.906875,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.90532,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0168-S169-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.069312,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.052747,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.019648,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 7.9e-05,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0169-S170-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.487879,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.645362,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.460917,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.946875,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0169-S170-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.065857,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.091286,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.058811,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.192628,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0181-S182-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.942839,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.9399,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.944513,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.874794,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0181-S182-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.282994,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.348781,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.539574,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.380876,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0181-S182-N7": {
+   "B1_logreg_4feat": {
+    "score": 0.881755,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.933547,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.934012,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.451501,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0184-S185-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.08804,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.117174,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.06268,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.007936,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0186-S187-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.966291,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.972082,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.971244,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.984227,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0187-S188-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.995033,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.938194,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.980879,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.99065,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0193-S194-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.422035,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.455305,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.832266,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.125519,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0195-S196-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.827289,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.841938,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.977973,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.041661,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0195-S196-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.858335,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.93268,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.530523,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.839897,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0195-S196-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.708475,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.865641,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.827106,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.797526,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0195-S196-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.977285,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.954113,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.971604,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.932107,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0195-S196-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.897065,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.940635,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.944698,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.840083,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0195-S196-N6": {
+   "B1_logreg_4feat": {
+    "score": 0.249221,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.33155,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.266897,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.875769,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0208-S209-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.481903,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.605823,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.199446,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.962671,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0212-S213-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.002563,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.161949,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.101525,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000472,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0217-S218-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.972827,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.947925,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.918902,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.876276,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0217-S218-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.717974,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.746839,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.280481,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.789605,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0217-S218-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.513007,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.673752,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.668758,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.869929,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0237-S238-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.250095,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.197959,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.236992,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.58913,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0237-S238-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.818013,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.895766,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.852471,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.960733,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0240-S240-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.994704,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.955668,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.989277,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.998408,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0246-S246-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.470526,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.422062,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.074292,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.221703,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0252-S252-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.987524,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.966676,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.989277,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.949467,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0257-S257-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.906217,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.953281,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.941329,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.964016,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0260-S260-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.928008,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.94662,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.927309,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.97731,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0260-S260-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.945441,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.951701,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.944372,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.957969,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0267-S267-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.996693,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.687476,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.976617,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.984087,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0296-S296-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.962096,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.930691,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.939816,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.828206,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0298-S298-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.50967,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.648769,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.81605,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.21236,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0298-S298-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.252215,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.270741,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.228214,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.269777,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0298-S298-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.025015,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.03469,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.00909,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.455373,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0298-S298-N6": {
+   "B1_logreg_4feat": {
+    "score": 0.570932,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.748613,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.227027,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.099003,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0300-S300-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.010599,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.060526,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.009999,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.193825,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0300-S300-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.270305,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.319223,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.164624,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.725975,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0300-S300-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.555904,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.741894,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.734456,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.783539,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0311-S311-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.805,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.922005,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.940371,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.995011,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0313-S313-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.998337,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.915772,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.986635,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.99907,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0326-S327-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.090245,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.050657,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.01115,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.48924,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0332-S333-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.999184,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.884605,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.993699,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.991091,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0345-S347-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.051763,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.054862,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.085797,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.132987,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0351-S353-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.025892,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.055726,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.01989,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000837,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0354-S356-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.354963,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.373685,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.051382,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000472,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0358-S361-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.297852,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.214098,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.591825,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.129045,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0360-S363-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.015433,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.287197,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.019955,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.272637,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0360-S363-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.868135,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.856623,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.956033,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.77007,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0377-S381-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.981263,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.951213,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.994482,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.963321,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0398-S402-N10": {
+   "B1_logreg_4feat": {
+    "score": 0.895329,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.909242,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.76755,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.498787,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0402-S406-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.088999,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.049638,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.01115,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.423592,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0402-S406-N9": {
+   "B1_logreg_4feat": {
+    "score": 0.99804,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.921825,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.984412,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.998695,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0412-S416-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.009653,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.072215,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.009999,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.53273,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0413-S417-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.127722,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.066543,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.01115,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.701892,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0413-S417-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.074411,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.04606,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.01115,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.806814,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0426-S430-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.369035,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.454117,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.176204,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.011295,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0427-S431-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.458844,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.408311,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.510439,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000848,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0427-S431-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.123495,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.056375,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.074739,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 2.4e-05,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0427-S431-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.091662,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.032533,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.052456,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000472,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0435-S439-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.043962,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.067127,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.032338,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.21236,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0435-S439-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.106564,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.287916,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.036471,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.158488,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0435-S439-N6": {
+   "B1_logreg_4feat": {
+    "score": 0.075085,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.124571,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.01115,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.790411,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0454-S459-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.027596,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.054759,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.035258,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.112563,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0454-S459-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.129099,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.081431,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.020847,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.838862,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0454-S459-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.011895,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.074945,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.016151,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.029123,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0454-S459-N6": {
+   "B1_logreg_4feat": {
+    "score": 0.998563,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.910406,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.978448,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.999436,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0467-S472-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.164427,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.08132,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.216368,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.097687,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0469-S474-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.972377,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.95198,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.993161,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.887293,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0476-S481-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.762848,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.894432,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.555769,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.47548,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0476-S481-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.246733,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.318383,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.370222,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.450377,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0476-S481-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.293568,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.240482,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.171675,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.605092,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0476-S481-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.71553,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.832791,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.928758,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.671127,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0476-S481-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.084963,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.058727,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.016787,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.323521,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0481-S486-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.250466,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.165202,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.244166,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.040589,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0481-S486-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.016889,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.044116,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.010544,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.071591,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0481-S486-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.100086,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.06895,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.087224,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.07129,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0481-S486-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.781925,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.91338,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.935516,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.657849,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0481-S486-N6": {
+   "B1_logreg_4feat": {
+    "score": 0.33781,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.278869,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.290211,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.21236,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0489-S495-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.955289,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.965564,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.96624,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.931539,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0489-S495-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.989968,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.953917,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.978233,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.988951,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0489-S495-N6": {
+   "B1_logreg_4feat": {
+    "score": 0.931306,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.960047,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.946671,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.882355,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0510-S516-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.910679,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.929275,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.972069,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.654252,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0523-S529-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.032667,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.044917,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.010693,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000472,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0524-S530-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.031511,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.032547,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.017814,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.038415,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0533-S539-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.699952,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.845077,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.646978,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.298966,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0535-S541-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.023415,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.041838,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.016151,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.040589,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0542-S548-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.02178,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.014311,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.034872,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000837,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0566-S572-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.18806,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.151977,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.116847,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.389105,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0568-S574-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.344395,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.242657,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.028582,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000472,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0568-S574-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.197434,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.098648,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.063526,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000628,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0583-S589-N13": {
+   "B1_logreg_4feat": {
+    "score": 0.069705,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.041338,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.04202,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.193825,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0583-S589-N19": {
+   "B1_logreg_4feat": {
+    "score": 0.887066,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.897314,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.984828,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.871784,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0610-S615-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.835473,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.924066,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.953427,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.980478,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0636-S641-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.020855,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.05689,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.010996,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.023295,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0636-S641-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.911455,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.957997,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.973855,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.849362,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0637-S642-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.055366,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.08045,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.063456,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.005004,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0637-S642-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.155502,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.193334,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.070847,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.536083,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0637-S642-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.066685,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.043619,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.013219,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.096495,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0641-S1014-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.02116,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.031805,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.024254,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.023295,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0641-S1014-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.887518,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.941105,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.942391,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.00124,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0641-S1014-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.230389,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.335341,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.680615,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000187,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0641-S1014-N6": {
+   "B1_logreg_4feat": {
+    "score": 0.267409,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.23637,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.399948,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.605092,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0644-S1011-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.017129,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.066528,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.014104,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.323521,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0645-S1010-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.556396,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.5,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.388733,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.905568,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0671-S984-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.781566,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.856755,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.932115,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.698115,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0671-S984-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.977013,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.964387,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.945844,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.988665,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0697-S958-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.999545,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.85681,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.974758,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.984693,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0702-S953-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.998969,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.885341,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.994605,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.998419,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0705-S950-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.912398,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.924064,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.671335,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.90492,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0706-S949-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.912577,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.943018,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.934325,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.518445,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0709-S946-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.991306,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.940685,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.989142,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.99857,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0709-S946-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.0027,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.105095,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.020876,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000249,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0724-S931-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.097676,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.111815,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.02506,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.274897,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0730-S925-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.04521,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.037178,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.012921,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.949242,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0749-S906-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.479831,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.57557,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.251775,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000837,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0749-S906-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.148692,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.123656,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.080242,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.389333,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0749-S906-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.96084,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.958116,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.949686,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.928298,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0749-S906-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.97272,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.962478,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.979893,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.875769,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0749-S906-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.075074,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.095594,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.022332,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.193825,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0751-S904-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.99825,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.913442,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.980879,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.991425,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0751-S904-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.731814,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.441413,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.987468,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.953542,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0751-S904-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.257961,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.344417,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.353093,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.101607,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0751-S904-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.160399,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.281083,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.015016,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.557336,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0751-S904-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.007789,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.061511,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.009588,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.020532,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0751-S904-N6": {
+   "B1_logreg_4feat": {
+    "score": 0.99829,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.917449,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.985281,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.984891,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0763-S892-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.011425,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.060316,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.089307,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.036354,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0770-S885-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.715557,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.856733,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.941886,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.487867,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0791-S864-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.970699,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.943419,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.958987,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000837,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0794-S861-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.43214,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.346737,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.819839,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.119364,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0795-S860-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.256936,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.310931,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.077037,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.993342,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0807-S848-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.846384,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.93325,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.893684,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000628,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0815-S840-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.796363,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.829913,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.88513,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.83001,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0829-S826-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.997311,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.925315,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.987599,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.98696,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0850-S805-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.985216,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.962898,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.987926,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.99641,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0850-S805-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.224069,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.151251,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.123733,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.005558,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0865-S790-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.997215,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.930826,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.987836,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.99583,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0874-S781-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.919507,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.910135,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.9906,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.738952,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0879-S776-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.95773,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.95907,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.759591,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000652,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0879-S776-N7": {
+   "B1_logreg_4feat": {
+    "score": 0.568147,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.587238,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.839481,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.21236,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0890-S765-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.990975,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.951724,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.973313,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.906841,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0906-S749-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.010073,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.037063,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.022911,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.020825,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0906-S749-N3": {
+   "B1_logreg_4feat": {
+    "score": 0.051956,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.225765,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.029635,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.175357,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0913-S742-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.107937,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.037404,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.039291,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.041661,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0913-S742-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.915501,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.906735,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.988193,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.905568,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0916-S739-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.008714,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.096293,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.008774,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.040589,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0916-S739-N2": {
+   "B1_logreg_4feat": {
+    "score": 0.017319,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.057778,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.008877,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.086383,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0916-S739-N7": {
+   "B1_logreg_4feat": {
+    "score": 0.045008,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.05199,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.023708,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.013268,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0925-S730-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.921984,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.965169,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.964085,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.962229,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0933-S722-N4": {
+   "B1_logreg_4feat": {
+    "score": 0.145627,
+    "threshold": 0.43,
+    "decision": 0
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.157641,
+    "threshold": 0.7,
+    "decision": 0
+   },
+   "B3_gboost_7geom": {
+    "score": 0.110218,
+    "threshold": 0.6,
+    "decision": 0
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000266,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0933-S722-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.908813,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.945955,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.941264,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.000485,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0942-S713-N0": {
+   "B1_logreg_4feat": {
+    "score": 0.992645,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.959487,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.989313,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.971371,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0942-S713-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.853807,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.928167,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.96705,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.958867,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0968-S687-N1": {
+   "B1_logreg_4feat": {
+    "score": 0.99631,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.938111,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.98873,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.972117,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  },
+  "LIDC-IDRI-0998-S657-N5": {
+   "B1_logreg_4feat": {
+    "score": 0.729417,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.849846,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.873845,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.453715,
+    "threshold": 0.5,
+    "decision": 0
+   }
+  },
+  "LIDC-IDRI-0998-S657-N6": {
+   "B1_logreg_4feat": {
+    "score": 0.67638,
+    "threshold": 0.43,
+    "decision": 1
+   },
+   "B2_svm_rbf_4feat": {
+    "score": 0.782096,
+    "threshold": 0.7,
+    "decision": 1
+   },
+   "B3_gboost_7geom": {
+    "score": 0.837461,
+    "threshold": 0.6,
+    "decision": 1
+   },
+   "R1_logreg_reader_ratings": {
+    "score": 0.957855,
+    "threshold": 0.5,
+    "decision": 1
+   }
+  }
+ }
+}

@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QURE Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: database-console shell — fixed sidebar of sections, breadcrumb top bar, one working canvas per section.
+   Dark-first; light mirrors it. Accent = signal green for selection/brand only; data series use their own hues. */
+:root{
+  --bg:#0b0d0c; --panel:#121514; --panel-2:#171b19; --hover:#1d2220; --line:#242a27; --line-2:#2f3632;
+  --fg:#e6ebe8; --muted:#8a948f; --faint:#5d6762;
+  --accent:#00e599; --accent-dim:rgba(0,229,153,.12); --accent-ink:#04261a;
+  --noiseless:#e6ebe8; --noisy:#f5a524; --mitig:#5aa8ff; --classical:#b49cff;
+  --ok:#3ddc97; --okbg:rgba(61,220,151,.12); --warn:#f5a524; --warnbg:rgba(245,165,36,.13); --bad:#ff6b6b; --badbg:rgba(255,107,107,.13);
+  --info:#5aa8ff; --infobg:rgba(90,168,255,.13);
+  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:8px; color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f6f8f7; --panel:#ffffff; --panel-2:#f1f4f2; --hover:#eaeeec; --line:#e1e6e3; --line-2:#d2d9d5;
+  --fg:#101513; --muted:#5a6560; --faint:#8b958f;
+  --accent:#00a66e; --accent-dim:rgba(0,166,110,.10); --accent-ink:#ffffff;
+  --noiseless:#101513; --noisy:#c77700; --mitig:#1f6fd1; --classical:#7a57d1;
+  --ok:#0f8a5a; --okbg:rgba(15,138,90,.10); --warn:#b26a00; --warnbg:rgba(199,119,0,.11); --bad:#d23f3f; --badbg:rgba(210,63,63,.10);
+  --info:#1f6fd1; --infobg:rgba(31,111,209,.10); color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f6f8f7; --panel:#ffffff; --panel-2:#f1f4f2; --hover:#eaeeec; --line:#e1e6e3; --line-2:#d2d9d5;
+  --fg:#101513; --muted:#5a6560; --faint:#8b958f;
+  --accent:#00a66e; --accent-dim:rgba(0,166,110,.10); --accent-ink:#ffffff;
+  --noiseless:#101513; --noisy:#c77700; --mitig:#1f6fd1; --classical:#7a57d1;
+  --ok:#0f8a5a; --okbg:rgba(15,138,90,.10); --warn:#b26a00; --warnbg:rgba(199,119,0,.11); --bad:#d23f3f; --badbg:rgba(210,63,63,.10);
+  --info:#1f6fd1; --infobg:rgba(31,111,209,.10); color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono,code,pre,td.num,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+code{font-size:12.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:0 4px}
+
+/* shell */
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;padding:14px 10px;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);flex:none}
+.brand b{font-weight:600;letter-spacing:-.01em}
+.proj{border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;background:var(--panel-2);display:grid;gap:2px}
+.proj small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.proj span{font-family:var(--mono);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav{display:grid;gap:2px}
+.nav .grp{color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.07em;padding:10px 10px 4px}
+.nav a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;color:var(--muted);text-decoration:none;font-weight:500}
+.nav a svg{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:1.6}
+.nav a:hover{background:var(--hover);color:var(--fg)}
+.nav a[aria-current="page"]{background:var(--accent-dim);color:var(--fg)}
+.nav a[aria-current="page"] svg{color:var(--accent)}
+.nav .cnt{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--faint)}
+.sidefoot{margin-top:auto;border-top:1px solid var(--line);padding:10px 8px 0;font-size:12px;color:var(--muted);display:grid;gap:4px}
+.sidefoot .row{display:flex;justify-content:space-between;gap:8px}
+.sidefoot .row span:last-child{font-family:var(--mono);color:var(--fg)}
+.main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:0 24px;height:52px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px)}
+.crumb{display:flex;align-items:center;gap:8px;min-width:0;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden}
+.crumb b{color:var(--fg);font-weight:500}
+.crumb i{font-style:normal;color:var(--faint)}
+.top .sp{flex:1}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:999px;font-size:11.5px;font-weight:500;border:1px solid var(--line-2);color:var(--muted);white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.ok{color:var(--ok);background:var(--okbg);border-color:transparent}
+.pill.warn{color:var(--warn);background:var(--warnbg);border-color:transparent}
+.pill.bad{color:var(--bad);background:var(--badbg);border-color:transparent}
+.pill.info{color:var(--info);background:var(--infobg);border-color:transparent}
+.pill.plain::before{display:none}
+.iconbtn{height:30px;min-width:30px;border:1px solid var(--line-2);background:var(--panel);border-radius:6px;cursor:pointer;display:grid;place-items:center;padding:0 8px}
+.iconbtn:hover{background:var(--hover)}
+.iconbtn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7}
+.page{padding:24px;display:grid;gap:20px;max-width:1360px;width:100%}
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ph h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.02em;text-wrap:balance}
+.ph p{margin:4px 0 0;color:var(--muted);max-width:72ch}
+
+/* surfaces */
+.card{border:1px solid var(--line);background:var(--panel);border-radius:var(--r);min-width:0}
+.card>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card>header h2{margin:0;font-size:13.5px;font-weight:600}
+.card>header .sub{color:var(--muted);font-size:12px}
+.card .body{padding:16px;min-width:0}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+.kpi{padding:14px 16px;display:grid;gap:6px;border-right:1px solid var(--line);min-width:0}
+.kpi:last-child{border-right:0}
+.kpi .lab{font-size:12px;color:var(--muted)}
+.kpi .val{font:500 26px/1.1 var(--mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .val small{font-size:13px;color:var(--muted);font-weight:400}
+.kpi .foot{font-size:12px;color:var(--muted)}
+.note{border:1px dashed var(--line-2);border-radius:var(--r);padding:10px 12px;color:var(--muted);font-size:12.5px}
+.note b{color:var(--fg);font-weight:500}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+.prose{max-width:72ch}
+.prose p{margin:0 0 10px}
+.prose ul{margin:0 0 10px;padding-left:18px}
+.prose li{margin:3px 0}
+h3{font-size:13px;margin:0 0 8px;font-weight:600}
+
+/* segmented + inputs */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:7px;padding:2px;background:var(--panel-2);gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:4px 10px;border-radius:5px;cursor:pointer;color:var(--muted);font-size:12.5px;font-weight:500}
+.seg button:hover{color:var(--fg)}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--fg);box-shadow:0 0 0 1px var(--line-2)}
+.seg button .k{font-family:var(--mono)}
+.field{display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);background:var(--panel);border-radius:7px;padding:0 10px;height:32px;min-width:0}
+.field svg{width:14px;height:14px;stroke:var(--faint);fill:none;stroke-width:1.8;flex:none}
+.field input{border:0;outline:0;background:transparent;color:var(--fg);font:13px var(--mono);width:200px;min-width:0}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);cursor:pointer}
+.chk input{accent-color:var(--accent)}
+.btn{height:32px;border:1px solid var(--line-2);background:var(--panel);border-radius:7px;padding:0 12px;cursor:pointer;font-weight:500;font-size:13px}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+
+/* tables */
+.tw{overflow:auto;min-width:0}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{text-align:left;font-weight:500;color:var(--muted);font-size:12px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--panel-2);white-space:nowrap;position:sticky;top:0;z-index:1}
+td{padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:var(--hover)}
+tbody tr[aria-selected="true"] td{background:var(--accent-dim)}
+tbody tr[aria-selected="true"] td:first-child{box-shadow:inset 2px 0 0 var(--accent)}
+td .id{font-family:var(--mono);font-size:12.5px}
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;font-size:11.5px;font-weight:500;font-family:var(--mono);border:1px solid var(--line-2);color:var(--muted)}
+.tag.pos{color:var(--bad);border-color:transparent;background:var(--badbg)}
+.tag.neg{color:var(--ok);border-color:transparent;background:var(--okbg)}
+.tag.held{color:var(--faint);border-style:dashed}
+.tag.flag{color:var(--warn);background:var(--warnbg);border-color:transparent}
+.tag.acc{color:var(--accent);background:var(--accent-dim);border-color:transparent}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.tbl-scroll{max-height:620px;overflow:auto}
+
+/* cases split view */
+.split{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px;align-items:start}
+.detail{position:sticky;top:68px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px}
+.kv dt{color:var(--muted)}
+.kv.sans dd{font-family:var(--sans)}
+.kv dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;min-width:0;overflow-wrap:anywhere}
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:150px minmax(0,1fr) 64px;gap:10px;align-items:center;font-size:12.5px}
+.bar .tr{height:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:4px;position:relative;overflow:hidden}
+.bar .fi{position:absolute;inset:0 auto 0 0;background:var(--accent);opacity:.75}
+.bar .n{font-family:var(--mono);text-align:right;color:var(--muted)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%}
+.legend i.line{height:2px;width:14px;border-radius:0}
+svg text{font-family:var(--mono);font-size:10.5px;fill:var(--muted)}
+svg .axis{stroke:var(--line-2)}
+svg .grid{stroke:var(--line)}
+.ct{display:grid;grid-template-columns:160px 1fr;gap:14px;align-items:start}
+.ct img{width:160px;height:160px;border-radius:6px;border:1px solid var(--line);image-rendering:pixelated;object-fit:cover}
+.status{display:grid;gap:0}
+.status .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.status .r:last-child{border-bottom:0}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden}
+.flow>div{padding:14px 16px;border-right:1px solid var(--line);display:grid;gap:8px;align-content:start;min-width:0}
+.flow>div:last-child{border-right:0}
+.flow .h{display:flex;align-items:center;gap:8px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.flow .h b{font-family:var(--mono);color:var(--accent);font-weight:500}
+.flow ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.flow li{font-size:13px;padding-left:14px;position:relative}
+.flow li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:1px;background:var(--faint)}
+pre.circ{margin:0;font-size:11.5px;line-height:1.35;overflow:auto;padding:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;color:var(--fg)}
+textarea.csv{width:100%;height:150px;background:var(--panel-2);color:var(--fg);border:1px solid var(--line);border-radius:6px;font:12px var(--mono);padding:10px;resize:vertical}
+.toast{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--panel);border:1px solid var(--line-2);border-radius:8px;padding:8px 12px;font-size:13px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.mobnav{display:none}
+/* simple / detailed view */
+body.simple .adv{display:none!important}
+body:not(.simple) .simple-only{display:none!important}
+.topctl{display:flex;align-items:center;gap:8px}
+.topctl .seg{flex-wrap:nowrap}
+.btn.ghost{background:transparent}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;color:var(--fg)}
+a.btn.primary{color:var(--accent-ink)}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8}
+.btn.icon{display:inline-flex;align-items:center;gap:6px}
+/* start page */
+.hero{display:grid;gap:6px}
+.hero h1{margin:0;font-size:26px;font-weight:600;letter-spacing:-.02em;text-wrap:balance}
+.hero p{margin:0;color:var(--muted);max-width:68ch;font-size:15px}
+.tasks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.task{display:grid;gap:10px;align-content:start;padding:18px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);text-decoration:none;color:var(--fg);min-width:0}
+.task:hover{border-color:var(--accent);background:var(--hover)}
+.task .ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:var(--accent-dim);color:var(--accent)}
+.task .ic svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+.task b{font-size:16px;font-weight:600}
+.task span{color:var(--muted);font-size:13px}
+.task i{font-style:normal;color:var(--accent);font-size:13px;font-weight:500}
+.finds{display:grid;gap:0}
+.find{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;padding:14px 16px;border-bottom:1px solid var(--line);align-items:center}
+.find:last-child{border-bottom:0}
+.find .big{font:500 24px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+.find .big small{display:block;font:12px var(--sans);color:var(--muted);margin-top:4px}
+.find h3{margin:0 0 2px;font-size:14px}
+.find p{margin:0;color:var(--muted);font-size:13px;max-width:70ch}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line-2);border-radius:999px;padding:5px 11px;background:var(--panel);cursor:pointer;font-size:12.5px;color:var(--fg);text-align:left}
+.chip:hover{border-color:var(--accent);background:var(--accent-dim)}
+/* glossary terms */
+.term{border:0;background:none;padding:0;color:inherit;font:inherit;border-bottom:1px dotted var(--muted);cursor:help}
+.pop{position:absolute;z-index:60;max-width:280px;background:var(--panel);border:1px solid var(--line-2);border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.45;box-shadow:0 8px 28px rgba(0,0,0,.28);color:var(--fg)}
+.pop b{display:block;margin-bottom:2px}
+/* accuracy lab */
+.lab{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px;align-items:start}
+.ctl{display:grid;gap:14px}
+.ctl label.h{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+.ctl input[type=range]{width:100%;accent-color:var(--accent)}
+.thr{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.thr .v{font:500 22px var(--mono)}
+.cm{display:grid;grid-template-columns:auto repeat(2,minmax(0,1fr));gap:6px;font-size:12.5px}
+.cm .hd{color:var(--muted);font-size:11.5px;align-self:end;padding:0 4px}
+.cm .rowh{color:var(--muted);font-size:11.5px;align-self:center;writing-mode:horizontal-tb;padding-right:6px}
+.cm .cell{border-radius:8px;padding:12px;display:grid;gap:2px;border:1px solid var(--line)}
+.cm .cell b{font:500 26px/1 var(--mono)}
+.cm .good{background:var(--okbg)} .cm .badc{background:var(--badbg)}
+.formula{font:13px/1.7 var(--mono);background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto}
+.mets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.met{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:2px}
+.met span{font-size:12px;color:var(--muted)} .met b{font:500 20px var(--mono)}
+.met small{font-size:11.5px;color:var(--muted)}
+.met .up{color:var(--ok)} .met .down{color:var(--bad)}
+/* help */
+details.faq{border-bottom:1px solid var(--line)}
+details.faq summary{cursor:pointer;padding:11px 16px;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::after{content:"+";color:var(--muted);font-family:var(--mono)}
+details.faq[open] summary::after{content:"−"}
+details.faq .a{padding:0 16px 12px;color:var(--muted);max-width:75ch}
+.gl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0}
+.gl div{padding:10px 16px;border-bottom:1px solid var(--line);min-width:0}
+.gl b{display:block;font-size:13px} .gl span{font-size:12.5px;color:var(--muted)}
+/* assistant */
+.fab{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:25;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.fab svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);z-index:50;background:var(--panel);border-left:1px solid var(--line-2);display:flex;flex-direction:column;box-shadow:-12px 0 40px rgba(0,0,0,.25);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.drawer>header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.drawer>header b{font-weight:600}
+.drawer>header .sp{flex:1}
+.msgs{flex:1;overflow:auto;padding:14px;display:grid;gap:12px;align-content:start}
+.msg{max-width:92%;padding:10px 12px;border-radius:10px;font-size:13.5px;line-height:1.5;overflow-wrap:anywhere}
+.msg.user{justify-self:end;background:var(--accent-dim);border:1px solid transparent}
+.msg.bot{justify-self:start;background:var(--panel-2);border:1px solid var(--line)}
+.msg .src{display:block;margin-top:6px;font-size:11px;color:var(--faint)}
+.msg .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.msg p{margin:0 0 6px} .msg p:last-child{margin:0}
+.askform{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
+.askform input{flex:1;min-width:0;height:38px;border:1px solid var(--line-2);border-radius:8px;background:var(--panel-2);color:var(--fg);padding:0 10px;font:14px var(--sans)}
+.drawer .foot{padding:0 14px 10px;font-size:11.5px;color:var(--faint)}
+.typing{color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:no-preference){.typing::after{content:"…";animation:blink 1s steps(2) infinite}@keyframes blink{50%{opacity:0}}}
+@media (max-width:1100px){.lab{grid-template-columns:minmax(0,1fr)} .tasks{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){.crumb span,.crumb i{display:none} .mets{grid-template-columns:repeat(2,minmax(0,1fr))} .gl{grid-template-columns:minmax(0,1fr)} .find{grid-template-columns:minmax(0,1fr)} .topctl .lbl{display:none} .fab .lbl{display:none} .fab{padding:0 13px}}
+
+@media (max-width:1100px){
+  .split{grid-template-columns:minmax(0,1fr)}
+  .detail{position:static}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi:nth-child(2){border-right:0}
+  .kpi:nth-child(-n+2){border-bottom:1px solid var(--line)}
+}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{display:none}
+  .mobnav{display:flex;gap:4px;overflow-x:auto;padding:8px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .mobnav a{flex:none;padding:6px 10px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:500}
+  .mobnav a[aria-current="page"]{background:var(--accent-dim);color:var(--fg)}
+  .top{padding:0 16px}
+  .top .pills{display:none}
+  .page{padding:16px}
+  .g2,.g3,.flow{grid-template-columns:minmax(0,1fr)}
+  .flow>div{border-right:0;border-bottom:1px solid var(--line)}
+  .flow>div:last-child{border-bottom:0}
+  .bar{grid-template-columns:110px minmax(0,1fr) 56px}
+  .ct{grid-template-columns:minmax(0,1fr)}
+  .field input{width:130px}
+}
+@media (max-width:480px){
+  .kpis{grid-template-columns:minmax(0,1fr)}
+  .kpi{border-right:0;border-bottom:1px solid var(--line)}
+  .kpi:last-child{border-bottom:0}
+}
+@media (prefers-reduced-motion:no-preference){.nav a,.seg button,tbody tr td{transition:background-color .12s,color .12s}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" aria-label="Sections">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="7"/><path d="M12 5v14M5 12h14" opacity=".55"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg></div>
+      <b>QURE Lab</b>
+    </div>
+    <div class="proj"><small>Cohort</small><span>cirdataset-lidc · primary</span></div>
+    <nav class="nav" id="nav">
+      <a href="#start" data-p="start"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Start</a>
+      <div class="grp">Explore</div>
+      <a href="#cases" data-p="cases"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M3 14h18M9 9v11"/></svg>Cases<span class="cnt" id="ncases"></span></a>
+      <a href="#noise" data-p="noise"><svg viewBox="0 0 24 24"><path d="M3 12h3l2-6 4 12 3-9 2 3h4"/></svg>Noise &amp; mitigation</a>
+      <div class="grp">Accuracy</div>
+      <a href="#accuracy" data-p="accuracy"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg>Accuracy lab</a>
+      <a href="#models" data-p="models" class="adv"><svg viewBox="0 0 24 24"><path d="M4 7h4M4 17h4M16 7h4M16 17h4"/><circle cx="12" cy="7" r="3"/><circle cx="12" cy="17" r="3"/><path d="M12 10v4"/></svg>Models</a>
+      <a href="#overview" data-p="overview" class="adv"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>All results</a>
+      <div class="grp">Learn</div>
+      <a href="#help" data-p="help"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14"/><path d="M12 17.5v.5"/></svg>Help &amp; FAQ</a>
+      <a href="#method" data-p="method"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>Method &amp; limits</a>
+      <div class="grp adv">Project</div>
+      <a href="#data" data-p="data" class="adv"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>Data</a>
+      <a href="#handoff" data-p="handoff" class="adv"><svg viewBox="0 0 24 24"><path d="M4 12h12M12 6l6 6-6 6"/><path d="M20 4v16"/></svg>Test handoff</a>
+      <p class="simple-only small muted" style="padding:8px 10px;margin:0">Switch to Detailed view for data, models and the test handoff.</p>
+    </nav>
+    <div class="sidefoot" id="sidefoot"></div>
+  </aside>
+  <div class="main">
+    <div class="top">
+      <div class="crumb"><span>QURE Lab</span><i>/</i><span>cirdataset</span><i>/</i><b id="crumb">Overview</b></div>
+      <div class="sp"></div>
+      <div class="pills adv"><span class="pill info">Simulated execution</span><span class="pill ok">Real data</span><span class="pill warn">Not clinical</span></div>
+      <div class="topctl">
+        <div class="seg" role="group" aria-label="View"><button type="button" data-view="simple">Simple</button><button type="button" data-view="detailed">Detailed</button></div>
+        <a class="btn icon" id="reportBtn" href="#" hidden title="Download the research report (PDF)"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><span class="lbl">Report</span></a>
+      </div>
+      <a class="btn primary" id="vrlink" href="#" hidden style="display:inline-flex;align-items:center;text-decoration:none">Open 3D lab</a>
+      <button class="iconbtn" id="theme" type="button" aria-label="Toggle light or dark theme"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+    </div>
+    <nav class="mobnav" id="mobnav" aria-label="Sections"></nav>
+    <main id="view" class="page"><p class="muted">Loading results…</p></main>
+  </div>
+</div>
+<button class="fab" id="fab" type="button" aria-controls="drawer" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg><span class="lbl">Ask QURE</span></button>
+<aside class="drawer" id="drawer" hidden aria-label="Ask QURE assistant">
+  <header><b>Ask QURE</b><span class="pill plain" id="aimode">guide</span><span class="sp"></span><button class="iconbtn" id="aiclear" type="button" title="Clear chat">Clear</button><button class="iconbtn" id="aiclose" type="button" aria-label="Close assistant">✕</button></header>
+  <div class="msgs" id="msgs" aria-live="polite"></div>
+  <form class="askform" id="askform"><input id="askq" type="text" placeholder="Ask about results, accuracy, noise…" autocomplete="off" maxlength="600" aria-label="Your question"><button class="btn primary" id="asksend" type="submit">Ask</button><button class="btn" id="askstop" type="button" hidden>Stop</button></form>
+  <div class="foot">Answers use this project's results only. Not medical advice.</div>
+</aside>
+<script>/*__JSPDF__*/</script>
+<script>/*__BUNDLE__*/</script>
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const f3 = v => v == null || Number.isNaN(v) ? "—" : Number(v).toFixed(3);
+const f2 = v => v == null ? "—" : Number(v).toFixed(2);
+const pct = v => v == null ? "—" : (100 * v).toFixed(1) + "%";
+const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
+const sd = a => { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1)); };
+const ci = c => c ? `[${f3(c[0])}, ${f3(c[1])}]` : "";
+const SVGNS = "http://www.w3.org/2000/svg";
+let B, S, ST = { split: "val", setting: "N3", q: "", flagged: false, sel: null, nsplit: "val", page: "start" };
+try { const t = localStorage.getItem("qure-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+
+function load() {
+  if (window.QURE_BUNDLE) return Promise.resolve(window.QURE_BUNDLE);
+  return fetch("qure_bundle.json").then(r => { if (!r.ok) throw new Error("qure_bundle.json was not found next to this page. Run tools/build_web_bundle.py, or open qure_lab_standalone.html."); return r.json(); });
+}
+
+/* ---------- tiny SVG chart kit (one scale per axis, labels from tokens) ---------- */
+function el(tag, attrs = {}, parent) { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function txt(parent, x, y, s, attrs = {}) { const t = el("text", { x, y, ...attrs }, parent); t.textContent = s; return t; }
+function ticks(lo, hi, n = 5) { const step = (hi - lo) / n; return Array.from({ length: n + 1 }, (_, i) => lo + i * step); }
+
+function groupedBars(host, { cats, series, max, fmt = f3, h = 220, ylab = "" }) {
+  const W = 560, H = h, m = { l: 44, r: 10, t: 12, b: 28 };
+  const s = el("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img" });
+  const iw = W - m.l - m.r, ih = H - m.t - m.b, y = v => m.t + ih - (v / max) * ih;
+  ticks(0, max, 4).forEach(t => { el("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: "grid" }, s); txt(s, m.l - 6, y(t) + 3, fmt(t), { "text-anchor": "end" }); });
+  const gw = iw / cats.length, bw = Math.min(22, (gw - 14) / series.length);
+  cats.forEach((c, i) => {
+    const x0 = m.l + i * gw + (gw - bw * series.length) / 2;
+    series.forEach((se, j) => {
+      const v = se.values[i]; if (v == null) return;
+      const r = el("rect", { x: x0 + j * bw + 1, y: y(v), width: bw - 2, height: Math.max(0.5, m.t + ih - y(v)), rx: 2, fill: `var(${se.color})` }, s);
+      const tt = el("title", {}, r); tt.textContent = `${c} · ${se.name}: ${fmt(v)}`;
+    });
+    txt(s, m.l + i * gw + gw / 2, H - 9, c, { "text-anchor": "middle" });
+  });
+  el("line", { x1: m.l, x2: W - m.r, y1: m.t + ih, y2: m.t + ih, class: "axis" }, s);
+  if (ylab) txt(s, m.l, 9, ylab, { "text-anchor": "start" });
+  host.appendChild(s);
+}
+
+function lines(host, { cats, series, lo, hi, refs = [], h = 220, fmt = f2 }) {
+  const W = 560, H = h, m = { l: 44, r: 12, t: 12, b: 28 };
+  const s = el("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img" });
+  const iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const x = i => m.l + (cats.length === 1 ? iw / 2 : (i / (cats.length - 1)) * iw);
+  const y = v => m.t + ih - ((v - lo) / (hi - lo)) * ih;
+  ticks(lo, hi, 4).forEach(t => { el("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: "grid" }, s); txt(s, m.l - 6, y(t) + 3, fmt(t), { "text-anchor": "end" }); });
+  refs.forEach(r => { el("line", { x1: m.l, x2: W - m.r, y1: y(r.v), y2: y(r.v), stroke: `var(${r.color})`, "stroke-dasharray": "4 4", "stroke-width": 1.2 }, s); });
+  series.forEach(se => {
+    el("polyline", { points: se.values.map((v, i) => `${x(i)},${y(v)}`).join(" "), fill: "none", stroke: `var(${se.color})`, "stroke-width": 2, "stroke-dasharray": se.dash || "" }, s);
+    se.values.forEach((v, i) => { const c = el("circle", { cx: x(i), cy: y(v), r: 3.5, fill: `var(${se.color})` }, s); el("title", {}, c).textContent = `${cats[i]} · ${se.name}: ${fmt(v)}`; });
+  });
+  cats.forEach((c, i) => txt(s, x(i), H - 9, c, { "text-anchor": "middle" }));
+  host.appendChild(s);
+}
+
+function legend(items) { return `<div class="legend">${items.map(([n, c, line]) => `<span><i class="${line ? "line" : ""}" style="background:var(${c})"></i>${esc(n)}</span>`).join("")}</div>`; }
+
+/* strip chart: one row per noise setting; x = raw score; threshold line; repeats as dots */
+function strip(host, c) {
+  const ids = B.noise_settings.map(s => s.id);
+  let lo = 0, hi = 1;
+  ids.forEach(id => [...c.S[id].n, ...c.S[id].m].forEach(v => { lo = Math.min(lo, v); hi = Math.max(hi, v); }));
+  const below = lo < 0, above = hi > 1; lo = Math.min(lo, -0.02); hi = Math.max(hi, 1.02);
+  const W = 560, rowH = 30, m = { l: 40, r: 12, t: 16, b: 26 }, H = m.t + rowH * ids.length + m.b;
+  const s = el("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img", "aria-label": "Repeat scores per noise setting" });
+  const iw = W - m.l - m.r, x = v => m.l + ((v - lo) / (hi - lo)) * iw;
+  [0, .25, .5, .75, 1].forEach(t => { el("line", { x1: x(t), x2: x(t), y1: m.t - 6, y2: H - m.b, class: "grid" }, s); txt(s, x(t), H - 9, t.toFixed(2), { "text-anchor": "middle" }); });
+  if (below) el("rect", { x: x(lo), y: m.t - 6, width: x(0) - x(lo), height: H - m.b - m.t + 6, fill: "var(--badbg)" }, s);
+  if (above) el("rect", { x: x(1), y: m.t - 6, width: x(hi) - x(1), height: H - m.b - m.t + 6, fill: "var(--badbg)" }, s);
+  const thr = B.model.threshold;
+  el("line", { x1: x(thr), x2: x(thr), y1: m.t - 8, y2: H - m.b, stroke: "var(--fg)", "stroke-width": 1, "stroke-dasharray": "3 3" }, s);
+  txt(s, x(thr) + 4, m.t - 8, `threshold ${thr}`, { "text-anchor": "start" });
+  ids.forEach((id, i) => {
+    const cy = m.t + rowH * i + rowH / 2, d = c.S[id], sel = id === ST.setting;
+    if (sel) el("rect", { x: 0, y: cy - rowH / 2 + 1, width: W, height: rowH - 2, fill: "var(--accent-dim)", rx: 4 }, s);
+    txt(s, 6, cy + 3, id, { "text-anchor": "start", style: sel ? "fill:var(--fg)" : "" });
+    el("line", { x1: x(c.nl), x2: x(c.nl), y1: cy - 10, y2: cy + 10, stroke: "var(--noiseless)", "stroke-width": 2 }, s);
+    d.n.forEach(v => el("circle", { cx: x(v), cy: cy - 4, r: 3.2, fill: "var(--noisy)", "fill-opacity": .85 }, s));
+    d.m.forEach(v => el("circle", { cx: x(v), cy: cy + 5, r: 3.2, fill: "none", stroke: "var(--mitig)", "stroke-width": 1.5 }, s));
+    if (d.f) txt(s, W - m.r, cy + 3, "U", { "text-anchor": "end", style: "fill:var(--warn);font-weight:600" });
+  });
+  host.appendChild(s);
+}
+
+/* per-qubit reduced-state Bloch vectors in the x–z plane (y is printed) */
+function bloch(host, d) {
+  const W = 560, H = 150, r = 52;
+  const s = el("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img", "aria-label": "Per-qubit Bloch vectors" });
+  for (let q = 0; q < 4; q++) {
+    const cx = 70 + q * 140, cy = 70;
+    el("circle", { cx, cy, r, fill: "none", class: "axis" }, s);
+    el("line", { x1: cx - r, x2: cx + r, y1: cy, y2: cy, class: "grid" }, s);
+    el("line", { x1: cx, x2: cx, y1: cy - r, y2: cy + r, class: "grid" }, s);
+    const v0 = d.b0[q], v1 = d.b[q];
+    el("line", { x1: cx, y1: cy, x2: cx + v0[0] * r, y2: cy - v0[2] * r, stroke: "var(--noiseless)", "stroke-width": 2 }, s);
+    el("circle", { cx: cx + v0[0] * r, cy: cy - v0[2] * r, r: 3, fill: "var(--noiseless)" }, s);
+    el("line", { x1: cx, y1: cy, x2: cx + v1[0] * r, y2: cy - v1[2] * r, stroke: "var(--noisy)", "stroke-width": 2, "stroke-dasharray": "3 2" }, s);
+    const len = a => Math.hypot(a[0], a[1], a[2]);
+    txt(s, cx, H - 8, `q${q} |r| ${f2(len(v0))} → ${f2(len(v1))}`, { "text-anchor": "middle" });
+  }
+  host.appendChild(s);
+}
+
+/* ---------- pages ---------- */
+const PAGES = { start: "Start", cases: "Cases", noise: "Noise & mitigation", accuracy: "Accuracy lab", models: "Models", overview: "All results", help: "Help & FAQ", method: "Method & limits", data: "Data", handoff: "Test handoff" };
+const relBy = (split) => Object.fromEntries((split === "val" ? S.quantum_reliability_val : S.quantum_reliability_test).map(r => [r.setting_id, r]));
+
+function overview() {
+  const q = S.quantum_val[0].noiseless, lr = S.classical_val["role2_logreg_threshold_0.5"], lrt = S.classical_val.role2_logreg_threshold_val_tuned;
+  const rv = relBy("val"), N4 = rv.N4, cmp = S.comparison_val;
+  const it = Object.fromEntries(S.instability_test_label_free.map(r => [r.setting_id, r]));
+  const ids = B.noise_settings.map(s => s.id);
+  const v = $("#view");
+  v.innerHTML = `
+  <div class="ph"><div><h1>Overview</h1>
+  <p>A 4-qubit Qiskit classifier on 597 LIDC-IDRI patients (one nodule each), run through five simulated noise settings with and without readout mitigation, and compared against a classical model on the same inputs.</p></div>
+  <div class="pills"><span class="pill ok">Validation scored</span><span class="pill warn">Test awaiting Role 2</span></div></div>
+
+  <section class="kpis" aria-label="Key results">
+    <div class="kpi"><span class="lab">Quantum balanced accuracy · validation</span><span class="val">${f3(q.balanced_accuracy)}</span><span class="foot">95% CI ${ci(q.ba_ci95)} · AUC ${f3(q.auc)}</span></div>
+    <div class="kpi"><span class="lab">Logistic regression · same inputs</span><span class="val">${f3(lr.balanced_accuracy)} <small>/ ${f3(lrt.balanced_accuracy)}</small></span><span class="foot">at 0.5 / val-tuned threshold · AUC ${f3(lr.auc)}</span></div>
+    <div class="kpi"><span class="lab">Quantum − classical (both val-tuned)</span><span class="val">${cmp.quantum_minus_logreg_ba_val_tuned_both >= 0 ? "+" : ""}${f3(cmp.quantum_minus_logreg_ba_val_tuned_both)}</span><span class="foot">paired 95% CI ${ci(cmp.paired_bootstrap_ci95)} · not distinguishable</span></div>
+    <div class="kpi"><span class="lab">Score error at N4, noisy → mitigated</span><span class="val">${f3(N4.mean_abs_dev_noisy)} <small>→ ${f3(N4.mean_abs_dev_mitigated)}</small></span><span class="foot">mean |score − noiseless| · spread ×${f2(N4.mean_std_mitigated / N4.mean_std_noisy)}</span></div>
+  </section>
+
+  <section class="flow" aria-label="Pipeline">
+    <div><div class="h"><b>IN</b> Input · Role 2</div><ul><li>CIRDataset CT patches with expert nodule masks</li><li>4 image/mask features per nodule</li><li>Mapped to angles θ = π·sigmoid(z), train-only scaling</li><li>Patient-level split 417 / 90 / 90</li></ul></div>
+    <div><div class="h"><b>PROC</b> Processing · Role 1</div><ul><li>RY encoding → 2 layers RY + CX chain → parity readout</li><li>Trained noiseless, frozen, threshold from validation</li><li>N0–N4 noise × 5 seeded repeats × 2000 shots</li><li>Tensored readout mitigation, values never clipped</li></ul></div>
+    <div><div class="h"><b>OUT</b> Output</div><ul><li>Noiseless reference, noisy execution, mitigated estimate per case</li><li>Pre-declared instability flag U</li><li>Comparison with logistic regression</li><li>Frozen test predictions for Role 2 to score</li></ul></div>
+  </section>
+
+  <div class="grid g2">
+    <section class="card"><header><h2>How far noisy scores drift from the noiseless reference</h2><span class="sub">validation · mean over 90 cases</span></header>
+      <div class="body"><div id="ov1"></div>${legend([["noisy execution", "--noisy"], ["mitigated estimate", "--mitig"]])}</div></section>
+    <section class="card"><header><h2>Cases flagged by rule U · test split</h2><span class="sub">label-free; simulated flips as ground truth</span></header>
+      <div class="body"><div id="ov2"></div>${legend([["flag rate", "--warn"], ["cases with any decision flip", "--faint"]])}</div></section>
+  </div>
+  <div class="note"><b>Reading these numbers.</b> The quantum model's restart and threshold were picked on validation, so its validation accuracy is optimistic; the val-tuned logistic regression carries the same optimism. Noise settings are a hypothetical simulator sweep, not hardware calibration data. Labels mean radiologist suspicion (rating 1–2 vs 4–5), not confirmed cancer.</div>`;
+  groupedBars($("#ov1"), { cats: ids, max: 0.16, series: [{ name: "noisy", color: "--noisy", values: ids.map(i => rv[i].mean_abs_dev_noisy) }, { name: "mitigated", color: "--mitig", values: ids.map(i => rv[i].mean_abs_dev_mitigated) }] });
+  groupedBars($("#ov2"), { cats: ids, max: 0.25, fmt: pct, series: [{ name: "flag rate", color: "--warn", values: ids.map(i => it[i].flag_rate) }, { name: "any flip", color: "--faint", values: ids.map(i => it[i].unstable_cases / it[i].n) }] });
+}
+
+function filtered() {
+  const q = ST.q.trim().toLowerCase();
+  return B.cases.filter(c => (ST.split === "all" || c.split === ST.split) && (!q || c.id.toLowerCase().includes(q) || c.patient.toLowerCase().includes(q)) && (!ST.flagged || c.S[ST.setting].f));
+}
+
+function cases() {
+  const v = $("#view");
+  const segS = [["val", "Validation"], ["test", "Test"], ["all", "All"]].map(([k, n]) => `<button type="button" data-split="${k}" aria-pressed="${ST.split === k}">${n}</button>`).join("");
+  const segN = B.noise_settings.map(s => `<button type="button" data-set="${s.id}" aria-pressed="${ST.setting === s.id}" title="${esc(s.label)}"><span class="k">${s.id}</span></button>`).join("");
+  v.innerHTML = `
+  <div class="ph"><div><h1>Cases</h1><p>Each row is one nodule. Pick a noise setting to play back its precomputed runs; values are never interpolated between settings.</p></div></div>
+  <div class="toolbar">
+    <div class="seg" role="group" aria-label="Split">${segS}</div>
+    <div class="seg" role="group" aria-label="Noise setting">${segN}</div>
+    <label class="field" for="q"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search case or patient" value="${esc(ST.q)}"></label>
+    <label class="chk" for="fl"><input id="fl" type="checkbox" ${ST.flagged ? "checked" : ""}> Flagged by U only</label>
+    <span class="muted small" id="setdesc"></span>
+  </div>
+  <div class="split">
+    <section class="card"><header><h2 id="tcount"></h2><span class="sub mono">threshold ${B.model.threshold} · ${B.repeats} repeats × ${B.budget.shots_per_execution} shots</span></header>
+      <div class="tw tbl-scroll"><table><thead><tr><th>Case</th>${ST.split === "all" ? "<th>Split</th>" : ""}<th>Label</th><th class="num">Noiseless</th><th class="num adv">Noisy mean</th><th class="num">Mitigated mean</th><th>Decision</th><th>U</th><th class="num adv">Log. reg.</th></tr></thead><tbody id="tb"></tbody></table></div></section>
+    <section class="card detail" id="det"></section>
+  </div>`;
+  v.querySelectorAll("[data-split]").forEach(b => b.onclick = () => { ST.split = b.dataset.split; cases(); });
+  v.querySelectorAll("[data-set]").forEach(b => b.onclick = () => { ST.setting = b.dataset.set; cases(); });
+  $("#q").oninput = e => { ST.q = e.target.value; rows(); };
+  $("#fl").onchange = e => { ST.flagged = e.target.checked; rows(); };
+  const s = B.noise_settings.find(x => x.id === ST.setting);
+  $("#setdesc").textContent = `${s.id} ${s.label}: p1q ${s.p1q}, p2q ${s.p2q}, readout ${s.readout_p10}/${s.readout_p01}`;
+  rows();
+}
+
+function rows() {
+  const list = filtered();
+  if (!list.find(c => c.id === ST.sel)) ST.sel = list.length ? list[0].id : null;
+  $("#tcount").textContent = `${list.length} case${list.length === 1 ? "" : "s"}`;
+  const thr = B.model.threshold;
+  $("#tb").innerHTML = list.map(c => {
+    const d = c.S[ST.setting], nm = mean(d.n), mm = mean(d.m), dec = mm >= thr ? 1 : 0;
+    const lab = c.label == null ? `<span class="tag held">held</span>` : `<span class="tag ${c.label ? "pos" : "neg"}">${c.label ? "high" : "low"}</span>`;
+    return `<tr class="click" tabindex="0" data-id="${esc(c.id)}" aria-selected="${c.id === ST.sel}">
+      <td><span class="id" title="${esc(c.id)}">${esc(c.patient)}</span></td>${ST.split === "all" ? `<td class="muted">${c.split}</td>` : ""}<td>${lab}</td>
+      <td class="num">${f3(c.nl)}</td><td class="num adv">${f3(nm)}</td><td class="num">${f3(mm)}</td>
+      <td><span class="tag ${dec ? "pos" : "neg"}">${dec ? "high" : "low"}</span></td>
+      <td>${d.f ? `<span class="tag flag">U</span>` : `<span class="muted">·</span>`}</td>
+      <td class="num adv">${c.lr == null ? `<span class="muted">—</span>` : f3(c.lr)}</td></tr>`;
+  }).join("") || `<tr><td colspan="${ST.split === "all" ? 9 : 8}" class="muted">No cases match. Clear the search or the flag filter.</td></tr>`;
+  $("#tb").querySelectorAll("tr[data-id]").forEach(tr => {
+    const pick = () => { ST.sel = tr.dataset.id; $("#tb").querySelectorAll("tr").forEach(r => r.setAttribute("aria-selected", r === tr)); detail(); };
+    tr.onclick = pick; tr.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } };
+  });
+  detail();
+}
+
+function detail() {
+  const host = $("#det"), c = B.cases.find(x => x.id === ST.sel);
+  if (!c) { host.innerHTML = `<div class="body muted">Select a case to see its runs.</div>`; return; }
+  const d = c.S[ST.setting], thr = B.model.threshold, nm = mean(d.n), mm = mean(d.m), se = sd(d.m) / Math.sqrt(d.m.length);
+  const lab = c.label == null ? `<span class="tag held">label held by Role 2</span>` : `<span class="tag ${c.label ? "pos" : "neg"}">reference: ${c.label ? "high suspicion" : "low suspicion"}</span>`;
+  const linked = c.id === B.linked.case_id;
+  const fnames = B.dataset.features;
+  host.innerHTML = `
+    <header><h2 class="mono">${esc(c.id)}</h2>${lab}</header>
+    <div class="body grid">
+      <dl class="kv">
+        <dt>Patient</dt><dd>${esc(c.patient)} · ${c.split}</dd>
+        <dt>Noiseless reference</dt><dd>${f3(c.nl)} → ${c.dec ? "high" : "low"}</dd>
+        <dt>Noisy execution (${ST.setting})</dt><dd>${f3(nm)} ± ${f3(sd(d.n))} · exact ${f3(d.nx)}</dd>
+        <dt>Mitigated estimate (${ST.setting})</dt><dd>${f3(mm)} ± ${f3(sd(d.m))} · ${d.q}/5 repeats had negative quasi-probabilities</dd>
+        <dt>Decision flips vs reference</dt><dd>noisy ${pct(d.fn)} · mitigated ${pct(d.fm)}</dd>
+        <dt>Rule U</dt><dd>${d.f ? `<span class="tag flag">flagged</span> ${Math.abs(mm - thr) < 2 * se ? "mitigated mean within 2 SE of threshold" : "raw and mitigated decisions disagree"}` : "not flagged"}</dd>
+        <dt class="adv">Platt probability</dt><dd class="adv">${f3(c.platt)} <span class="muted">(fit on validation, noiseless only)</span></dd>
+        <dt class="adv">No-CX ablation</dt><dd class="adv">${f3(c.abl)} → ${c.abl >= B.abl_threshold ? "high" : "low"} <span class="muted">(thr ${B.abl_threshold})</span></dd>
+        <dt>Logistic regression</dt><dd>${c.lr == null ? "test prediction not shared" : `${f3(c.lr)} → ${c.lr >= .5 ? "high" : "low"}`}</dd>
+      </dl>
+      <div><h3>Repeat scores by noise setting</h3><div id="strip"></div>
+        ${legend([["noiseless reference", "--noiseless", 1], ["noisy repeat", "--noisy"], ["mitigated repeat", "--mitig"]])}
+        <p class="muted small" style="margin:6px 0 0">Mitigated estimates outside [0, 1] would show in a red band and are kept, not clipped. U marks settings where rule U flags this case.</p></div>
+      <div class="adv"><h3>Inputs</h3><div class="bars">${c.angles.map((a, j) => `<div class="bar"><span class="mono">${esc(fnames[j])}</span><span class="tr"><span class="fi" style="width:${(a / Math.PI * 100).toFixed(1)}%"></span></span><span class="n">θ ${f2(a)}</span></div>`).join("")}</div>
+        <p class="muted small" style="margin:8px 0 0">Raw values recovered from θ: ${c.features.map((x, j) => `${fnames[j]} ${f2(x)}`).join(" · ")}</p></div>
+      <div class="adv"><h3>Per-qubit state at ${ST.setting}</h3><div id="bl"></div>
+        ${legend([["noiseless", "--noiseless", 1], ["gate-noisy", "--noisy", 1]])}
+        <p class="muted small" style="margin:6px 0 0">Bloch vectors of each qubit's reduced state. Entanglement alone shortens them, so length is not confidence. Readout mitigation does not change the state.</p></div>
+      ${B.vr_url ? `<div><a class="btn primary" style="display:inline-flex;align-items:center;text-decoration:none" href="${esc(B.vr_url)}?case=${encodeURIComponent(c.id)}&n=${ST.setting}&split=${c.split}">Open this case in the 3D lab</a></div>` : ""}
+      ${linked ? `<div class="ct"><img src="${B.linked.png}" alt="CT slice ${B.linked.slice_index} with the expert nodule mask outlined"><div class="small"><h3>Linked CT patch</h3><p class="muted" style="margin:0">Slice ${B.linked.slice_index} of the CIRDataset patch for this case, mask outline in cyan. Rendered by Role 2. Stored intensities are preprocessed, not raw HU.</p></div></div>` : ""}
+    </div>`;
+  strip($("#strip"), c);
+  bloch($("#bl"), d);
+}
+
+function noise() {
+  const v = $("#view"), ids = B.noise_settings.map(s => s.id), sp = ST.nsplit, r = relBy(sp);
+  const iv = Object.fromEntries((sp === "val" ? S.instability_val : S.instability_test_label_free).map(x => [x.setting_id, x]));
+  const qv = Object.fromEntries(S.quantum_val.map(x => [x.setting_id, x]));
+  const lr = S.classical_val["role2_logreg_threshold_0.5"].balanced_accuracy;
+  v.innerHTML = `
+  <div class="ph"><div><h1>Noise &amp; mitigation</h1><p>${esc(B.noise_source)}. Mitigation inverts per-qubit readout calibration; it targets measurement errors only and does not correct gate noise.</p></div>
+  <div class="seg" role="group" aria-label="Split"><button type="button" data-ns="val" aria-pressed="${sp === "val"}">Validation</button><button type="button" data-ns="test" aria-pressed="${sp === "test"}">Test (label-free)</button></div></div>
+  <section class="card simple-only"><header><h2>In plain words</h2></header><div class="body prose small">
+    <ul><li><b>Noise moves scores.</b> At the strongest setting (N4) the average score is off by ${f3(r.N4.mean_abs_dev_noisy)}, and ${pct(r.N4.mean_flip_rate_noisy)} of runs change the decision.</li>
+    <li><b>Mitigation removes most of that drift</b> (down to ${f3(r.N4.mean_abs_dev_mitigated)}) but only for ${term("readout errors", "Readout error")}; gate noise (N2) stays.</li>
+    <li><b>It is not free.</b> It needs ${B.budget.mitigated_total_shots / B.budget.shots_per_execution}× the ${term("shots", "Shot")} and makes repeated runs disagree more with each other.</li>
+    <li>${term("Rule U", "Rule U")} flags cases worth a second look; at N4 it flagged ${pct(iv.N4.flag_rate)} of cases.</li></ul></div></section>
+  <section class="card adv"><header><h2>Settings</h2><span class="sub">basis rz, sx, x, cx · optimization level 0 · ${B.budget.shots_per_execution} shots + ${B.budget.calibration_shots_total} calibration shots per repeat</span></header>
+    <div class="tw"><table><thead><tr><th>Setting</th><th>Description</th><th class="num">1q depol.</th><th class="num">2q depol.</th><th class="num">P(1|0)</th><th class="num">P(0|1)</th><th class="num">|Δ| noisy</th><th class="num">|Δ| mitigated</th><th class="num">Std noisy</th><th class="num">Std mitigated</th><th class="num">Std equal budget</th><th class="num">Neg. quasi-prob</th></tr></thead>
+    <tbody>${B.noise_settings.map(s => { const x = r[s.id]; return `<tr><td><span class="tag acc">${s.id}</span></td><td>${esc(s.label)}</td><td class="num">${s.p1q}</td><td class="num">${s.p2q}</td><td class="num">${s.readout_p10}</td><td class="num">${s.readout_p01}</td><td class="num">${f3(x.mean_abs_dev_noisy)}</td><td class="num">${f3(x.mean_abs_dev_mitigated)}</td><td class="num">${f3(x.mean_std_noisy)}</td><td class="num">${f3(x.mean_std_mitigated)}</td><td class="num">${f3(x.mean_std_noisy_equal_budget)}</td><td class="num">${x.negative_quasiprob_repeats_total}/${x.n_cases * B.repeats}</td></tr>`; }).join("")}</tbody></table></div></section>
+  <div class="grid g2">
+    <section class="card"><header><h2>Bias: mean |score − noiseless|</h2></header><div class="body"><div id="c1"></div>${legend([["noisy execution", "--noisy"], ["mitigated estimate", "--mitig"]])}</div></section>
+    <section class="card"><header><h2>Cost: repeat-to-repeat spread</h2></header><div class="body"><div id="c2"></div>${legend([["noisy, 2000 shots", "--noisy"], ["mitigated, 2000 + 4000 cal.", "--mitig"], ["noisy, equal 6000-shot budget", "--faint"]])}</div></section>
+    <section class="card adv"><header><h2>Decision flips vs noiseless reference</h2><span class="sub">share of repeats</span></header><div class="body"><div id="c3"></div>${legend([["noisy execution", "--noisy"], ["mitigated estimate", "--mitig"]])}</div></section>
+    <section class="card adv"><header><h2>${sp === "val" ? "Balanced accuracy by setting · single repeat" : "Balanced accuracy"}</h2></header><div class="body">${sp === "val" ? `<div id="c4"></div>${legend([["noiseless reference", "--noiseless"], ["noisy (repeat 1)", "--noisy"], ["mitigated (repeat 1)", "--mitig"], ["logistic regression at 0.5", "--classical", 1]])}` : `<p class="muted">Test labels are held by Role 2 until predictions are scored, so no accuracy is shown here.</p>`}</div></section>
+  </div>
+  <section class="card adv"><header><h2>Instability rule U</h2><span class="sub">${esc(B.instability_rule)}</span></header>
+    <div class="tw"><table><thead><tr><th>Setting</th><th class="num">Flag rate</th><th class="num">Cases with any flip</th><th class="num">Recall of unstable</th><th class="num">Precision</th>${sp === "val" ? `<th class="num">Error rate, flagged</th><th class="num">Error rate, kept</th><th class="num">Coverage kept</th>` : ""}</tr></thead>
+    <tbody>${ids.map(i => { const x = iv[i]; return `<tr><td><span class="tag acc">${i}</span></td><td class="num">${pct(x.flag_rate)}</td><td class="num">${x.unstable_cases}</td><td class="num">${pct(x.flag_recall_of_unstable)}</td><td class="num">${pct(x.flag_precision)}</td>${sp === "val" ? `<td class="num">${pct(x.label_error_rate_flagged)}</td><td class="num">${pct(x.label_error_rate_retained)}</td><td class="num">${pct(x.coverage_retained)}</td>` : ""}</tr>`; }).join("")}</tbody></table></div>
+    <div class="body small muted">U uses only quantities a real device would give (raw and mitigated repeats). "Unstable" means at least one noisy repeat decided differently from the noiseless reference, which only a simulator can know. U is a review prompt, not a trust score.</div></section>`;
+  v.querySelectorAll("[data-ns]").forEach(b => b.onclick = () => { ST.nsplit = b.dataset.ns; noise(); });
+  groupedBars($("#c1"), { cats: ids, max: 0.16, series: [{ name: "noisy", color: "--noisy", values: ids.map(i => r[i].mean_abs_dev_noisy) }, { name: "mitigated", color: "--mitig", values: ids.map(i => r[i].mean_abs_dev_mitigated) }] });
+  groupedBars($("#c2"), { cats: ids, max: 0.024, series: [{ name: "noisy", color: "--noisy", values: ids.map(i => r[i].mean_std_noisy) }, { name: "mitigated", color: "--mitig", values: ids.map(i => r[i].mean_std_mitigated) }, { name: "equal budget", color: "--faint", values: ids.map(i => r[i].mean_std_noisy_equal_budget) }] });
+  groupedBars($("#c3"), { cats: ids, max: Math.max(0.04, Math.ceil(Math.max(...ids.map(i => r[i].mean_flip_rate_noisy)) * 25) / 25), fmt: pct, series: [{ name: "noisy", color: "--noisy", values: ids.map(i => r[i].mean_flip_rate_noisy) }, { name: "mitigated", color: "--mitig", values: ids.map(i => r[i].mean_flip_rate_mitigated) }] });
+  if (sp === "val") lines($("#c4"), { cats: ids, lo: 0.7, hi: 0.9, refs: [{ v: lr, color: "--classical" }], fmt: f2, series: [
+    { name: "noiseless", color: "--noiseless", dash: "5 4", values: ids.map(i => qv[i].noiseless.balanced_accuracy) },
+    { name: "noisy", color: "--noisy", values: ids.map(i => qv[i].noisy_repeat0.balanced_accuracy) },
+    { name: "mitigated", color: "--mitig", values: ids.map(i => qv[i].mitigated_repeat0.balanced_accuracy) }] });
+}
+
+function models() {
+  const v = $("#view"), q = S.quantum_val[0].noiseless, a = S.ablation_no_entanglement_val[0].noiseless;
+  const l5 = S.classical_val["role2_logreg_threshold_0.5"], lt = S.classical_val.role2_logreg_threshold_val_tuned, dm = S.classical_val.role2_reported.dummy_prior;
+  const row = (n, m, thrNote, kind) => `<tr><td>${n}</td><td><span class="tag ${kind === "q" ? "acc" : ""}">${kind === "q" ? "quantum" : kind === "c" ? "classical" : "baseline"}</span></td><td class="num">${m.threshold ?? "—"}</td><td class="num">${f3(m.balanced_accuracy)}</td><td class="num muted">${ci(m.ba_ci95)}</td><td class="num">${f3(m.auc ?? m.roc_auc)}</td><td class="num">${f3(m.sensitivity)}</td><td class="num">${f3(m.specificity)}</td><td class="muted small">${thrNote}</td></tr>`;
+  const ops = B.circuit.transpiled_ops;
+  v.innerHTML = `
+  <div class="ph"><div><h1>Models</h1><p>All models see the same four inputs for the same 90 validation nodules. Test results arrive when Role 2 scores the frozen predictions.</p></div></div>
+  <section class="card"><header><h2>Validation comparison</h2><span class="sub">n = 90 · 44 high / 46 low</span></header>
+    <div class="tw"><table><thead><tr><th>Model</th><th>Kind</th><th class="num">Threshold</th><th class="num">Bal. acc.</th><th class="num">95% CI</th><th class="num">AUC</th><th class="num">Sens.</th><th class="num">Spec.</th><th>Threshold source</th></tr></thead><tbody>
+      ${row(`4-qubit VQC, CX chain <span class="muted mono small">${esc(B.model.model_id)}</span>`, q, "validation (optimistic)", "q")}
+      ${row(`4-qubit VQC, no CX (ablation)`, a, "validation (optimistic)", "q")}
+      ${row("Logistic regression (Role 2)", l5, "fixed 0.5", "c")}
+      ${row("Logistic regression, val-tuned", lt, "validation (optimistic)", "c")}
+      ${row("Class prior (dummy)", { ...dm, threshold: "—" }, "always predicts low", "b")}
+    </tbody></table></div>
+    <div class="body small muted">Paired bootstrap of the quantum minus val-tuned logistic regression difference: ${f3(S.comparison_val.quantum_minus_logreg_ba_val_tuned_both)}, 95% CI ${ci(S.comparison_val.paired_bootstrap_ci95)}. The interval spans zero, so the two are not distinguishable on 90 cases. We make no claim of quantum advantage.</div></section>
+  <div class="grid g2 adv">
+    <section class="card"><header><h2>Circuit</h2><span class="sub">${B.circuit.n_qubits} qubits · ${B.circuit.n_trainable_params} trainable angles · transpiled depth ${B.circuit.transpiled_depth}</span></header>
+      <div class="body grid"><div class="pills">${Object.entries(ops).map(([k, n]) => `<span class="pill plain mono">${k} ${n}</span>`).join("")}</div>
+      <pre class="circ">${esc(B.circuit.text_drawing)}</pre><p class="muted small" style="margin:0">Drawn with placeholder angles (0.1 for inputs, 0.2 for weights) to show structure; real runs bind each case's θ and the frozen weights.</p>
+      <p class="muted small" style="margin:0">Output: ${esc(B.circuit.output)}. The raw score is not a probability; a Platt map fitted on validation (a = ${f2(S.calibration.coef)}, b = ${f2(S.calibration.intercept)}) is reported separately and only for noiseless scores.</p></div></section>
+    <section class="card"><header><h2>Training</h2><span class="sub">${esc(B.model.optimizer)} · max ${B.model.maxiter} evaluations · ${B.model.seconds}s</span></header>
+      <div class="tw"><table><thead><tr><th>Restart</th><th class="num">Train loss</th><th class="num">Val loss</th><th class="num">Evaluations</th><th></th></tr></thead><tbody>
+      ${(() => { const best = Math.min(...B.model.restarts.map(r => r.val_loss)); return B.model.restarts.map(r => `<tr><td class="mono">${r.restart}</td><td class="num">${r.train_loss.toFixed(4)}</td><td class="num">${r.val_loss.toFixed(4)}</td><td class="num">${r.nfev}</td><td>${r.val_loss === best ? `<span class="tag acc">selected</span>` : ""}</td></tr>`).join(""); })()}
+      </tbody></table></div>
+      <div class="body small muted">Loss is class-balanced cross-entropy on noiseless scores from the train split. The restart with the lowest validation loss is kept, then the threshold is set to maximise validation balanced accuracy (${B.model.threshold}). Parameters are frozen before any noisy run or test prediction. Encoding: <code>${esc(B.model.encoding)}</code>.</div></section>
+  </div>`;
+}
+
+function data() {
+  const v = $("#view"), D = B.dataset, L = B.lidc;
+  const lq = L.quantum_test[0], lc = L.classical_test;
+  const lrel = Object.fromEntries(L.reliability_test.map(r => [r.setting_id, r]));
+  v.innerHTML = `
+  <div class="ph"><div><h1>Data</h1><p>The primary cohort comes from Role 2. A second cohort built by Role 1 from LIDC reader contours is kept as a replication check.</p></div></div>
+  <div class="grid g2">
+    <section class="card"><header><h2>Primary cohort · CIRDataset</h2><span class="pill ok">real data</span></header>
+      <div class="body grid">
+        <dl class="kv sans">
+          <dt>Source</dt><dd>${esc(D.source)}</dd>
+          <dt>Archive</dt><dd>${esc(D.version)}</dd>
+          <dt>Unit</dt><dd>${esc(D.unit)}</dd>
+          <dt>Label</dt><dd>${esc(D.label)}</dd>
+          <dt>Patients</dt><dd>${D.patients} · ${D.classes["1"]} high / ${D.classes["0"]} low</dd>
+          <dt>Split (patient-level)</dt><dd>train ${D.split_counts.train} · val ${D.split_counts.val} · test ${D.split_counts.test}</dd>
+          <dt>Excluded</dt><dd>rating 3: ${D.excluded.rating_3} · rating 0: ${D.excluded.rating_0} · alternate scans: ${D.excluded.alternate_scans} · LUNGx patches: ${D.excluded.lungx_patches}</dd>
+          <dt>Mapping</dt><dd>${esc(D.mapping)}</dd>
+          <dt>Units</dt><dd>${esc(D.units)}</dd>
+        </dl>
+        <div><h3>Features</h3><div class="pills">${D.features.map((f, j) => `<span class="pill plain mono">θ${j} ← ${esc(f)}</span>`).join("")}</div></div>
+        <div><h3>Known limits (from Role 2)</h3><ul class="small" style="margin:0;padding-left:18px">${D.limitations.map(l => `<li>${esc(l)}</li>`).join("")}</ul></div>
+      </div></section>
+    <section class="card"><header><h2>Replication cohort · LIDC reader contours</h2><span class="pill info">secondary</span></header>
+      <div class="body grid">
+        <dl class="kv sans">
+          <dt>Source</dt><dd>${esc(L.source)}</dd>
+          <dt>Label</dt><dd>${esc(L.label)}</dd>
+          <dt>Features</dt><dd>${L.features.join(", ")} (contour geometry)</dd>
+          <dt>Test split</dt><dd>${L.split_counts.test.nodules} nodules · ${L.split_counts.test.patients} patients · labels scored</dd>
+        </dl>
+        <div class="tw"><table><thead><tr><th>Test result</th><th class="num">Bal. acc.</th><th class="num">95% CI</th><th class="num">AUC</th></tr></thead><tbody>
+          <tr><td>4-qubit VQC, noiseless</td><td class="num">${f3(lq.nl)}</td><td class="num muted">${ci(lq.ci)}</td><td class="num">${f3(lq.auc)}</td></tr>
+          ${Object.entries(lc).filter(([k]) => !k.startsWith("R1")).map(([k, x]) => `<tr><td>${esc(k.replace(/_/g, " "))}</td><td class="num">${f3(x.ba)}</td><td class="num muted">${ci(x.ci)}</td><td class="num">${f3(x.auc)}</td></tr>`).join("")}
+          <tr><td>No-CX ablation</td><td class="num">${f3(L.ablation_test)}</td><td></td><td></td></tr>
+        </tbody></table></div>
+        <p class="small muted" style="margin:0">Same circuit, same noise settings. At N4 mitigation cut mean |Δ| from ${f3(lrel.N4.mean_abs_dev_noisy)} to ${f3(lrel.N4.mean_abs_dev_mitigated)}. Features and nodule selection differ from the primary cohort, so the two are not pooled or compared head to head.</p>
+      </div></section>
+  </div>`;
+}
+
+function method() {
+  const v = $("#view");
+  const st = [
+    ["4-qubit classifier, training, frozen parameters", "ok", "Implemented · tested"],
+    ["Noise sweep N0–N4 with seeded repeats", "ok", "Implemented · tested"],
+    ["Tensored readout mitigation, unclipped", "ok", "Implemented · tested"],
+    ["Validation comparison with logistic regression", "ok", "Done"],
+    ["Test-split evaluation", "warn", "Predictions frozen · awaiting Role 2"],
+    ["Real quantum hardware run", "", "Planned"],
+    ["Clinical validity", "bad", "Not claimed"],
+    ["Quantum advantage", "bad", "Not claimed"],
+  ];
+  v.innerHTML = `
+  <div class="ph"><div><h1>Method &amp; limits</h1><p>What was built, how each number is made, and what the project does not claim.</p></div></div>
+  <div class="grid g2">
+    <section class="card"><header><h2>Status</h2></header><div class="body status">${st.map(([n, k, s]) => `<div class="r"><span>${n}</span><span class="pill ${k}">${s}</span></div>`).join("")}</div></section>
+    <section class="card"><header><h2>Three results per case</h2></header><div class="body prose small">
+      <p><b>Noiseless reference.</b> Exact statevector output of the frozen circuit. Available only in simulation.</p>
+      <p><b>Noisy execution.</b> Sampled counts from the Aer simulator with the setting's gate and readout noise, ${B.repeats} seeded repeats of ${B.budget.shots_per_execution} shots.</p>
+      <p><b>Mitigated estimate.</b> The same counts after inverting per-qubit readout calibration. It targets readout only; gate noise remains. Negative quasi-probabilities and out-of-range scores are counted and kept.</p>
+      <p>An equal-budget raw run (${B.budget.equal_budget_raw_shots} shots) shows what the calibration shots would buy if spent on plain sampling.</p></div></section>
+  </div>
+  <section class="card"><header><h2>Protocol</h2></header><div class="body prose small">
+    <ul>
+      <li>Role 2 split patients into train, validation and test, fitted scaling on train only, and kept test labels.</li>
+      <li>Role 1 trained on train, chose the restart and threshold on validation, then froze the parameters.</li>
+      <li>Rule U and Platt calibration were declared before any test run.</li>
+      <li>The noise slider plays back precomputed runs for five settings; nothing between them is interpolated.</li>
+      <li>Bloch vectors describe qubit states. They are not trust meters.</li>
+      <li>${esc(B.mitigation.calibration_prep_caveat)}.</li>
+    </ul></div></section>
+  <section class="card"><header><h2>Environment</h2></header><div class="body"><div class="pills">${Object.entries(B.environment).map(([k, x]) => `<span class="pill plain mono">${esc(k)} ${esc(x)}</span>`).join("")}</div>
+    <p class="small muted" style="margin:10px 0 0">Run ids: ${Object.values(B.run_ids).map(x => `<code>${esc(x)}</code>`).join(" ")}</p></div></section>`;
+}
+
+function csvText() {
+  const ids = B.noise_settings.map(s => s.id);
+  const head = ["case_id", "patient_id", "threshold", "noiseless_raw_score", "noiseless_decision", "platt_probability", ...ids.flatMap(i => [`${i}_noisy_mean`, `${i}_mitigated_mean`, `${i}_flag_U`])];
+  const rows = B.cases.filter(c => c.split === "test").map(c => [c.id, c.patient, B.model.threshold, c.nl, c.dec, c.platt, ...ids.flatMap(i => [mean(c.S[i].n).toFixed(4), mean(c.S[i].m).toFixed(4), c.S[i].f ? 1 : 0])]);
+  return [head, ...rows].map(r => r.join(",")).join("\n");
+}
+
+function handoff() {
+  const v = $("#view"), test = B.cases.filter(c => c.split === "test");
+  const hi = test.filter(c => c.dec === 1).length;
+  v.innerHTML = `
+  <div class="ph"><div><h1>Test handoff</h1><p>Frozen predictions for the 90 test nodules. Role 2 holds the labels and scores them; results appear here only after that.</p></div><span class="pill warn">Awaiting scoring</span></div>
+  <section class="kpis">
+    <div class="kpi"><span class="lab">Test cases</span><span class="val">${test.length}</span><span class="foot">${new Set(test.map(c => c.patient)).size} patients, none seen in training</span></div>
+    <div class="kpi"><span class="lab">Predicted high (noiseless)</span><span class="val">${hi}</span><span class="foot">threshold ${B.model.threshold}, frozen</span></div>
+    <div class="kpi"><span class="lab">Flagged by U at N4</span><span class="val">${test.filter(c => c.S.N4.f).length}</span><span class="foot">review prompts, not errors</span></div>
+    <div class="kpi"><span class="lab">Model version</span><span class="val" style="font-size:16px">${esc(B.model.param_version)}</span><span class="foot mono">${esc(B.model.model_id)}</span></div>
+  </section>
+  <section class="card"><header><h2>Predictions CSV</h2><div class="toolbar"><button class="btn primary" id="copy" type="button">Copy CSV</button></div></header>
+    <div class="body"><textarea class="csv" id="csv" readonly aria-label="Test predictions CSV"></textarea>
+    <p class="small muted" style="margin:8px 0 0">The full file with ablation scores is <code>results/role2/final/test_predictions_for_role2.csv</code> in the project folder.</p></div></section>
+  <section class="card"><header><h2>Message for Role 2</h2></header><div class="body prose small">
+    <p>Models and thresholds are frozen (${esc(B.model.model_id)}, ${esc(B.model.param_version)}, threshold ${B.model.threshold}; ablation threshold ${B.abl_threshold}). Please score <code>noiseless_decision</code> as the primary prediction, then the N0–N4 mitigated decisions, with balanced accuracy, sensitivity, specificity and AUC on <code>noiseless_raw_score</code>, plus Brier on <code>platt_probability</code>. Please also score your logistic regression on the same 90 cases so both are compared on the same split.</p></div></section>`;
+  $("#csv").value = csvText();
+  $("#copy").onclick = async () => {
+    try { await navigator.clipboard.writeText($("#csv").value); toast("Copied 90 rows"); }
+    catch (e) { $("#csv").select(); toast("Text selected. Press Ctrl+C or ⌘C to copy."); }
+  };
+}
+
+function toast(m) { const t = document.createElement("div"); t.className = "toast"; t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+
+/* ---------- glossary terms (click or hover for a short definition) ---------- */
+function term(label, key) { return `<button type="button" class="term" data-term="${esc(key || label)}">${esc(label)}</button>`; }
+let POP = null;
+function hidePop() { if (POP) { POP.remove(); POP = null; } }
+function showPop(btn) {
+  hidePop();
+  const g = (B.assistant?.glossary || []).find(x => x.term.toLowerCase() === btn.dataset.term.toLowerCase());
+  if (!g) return;
+  POP = document.createElement("div"); POP.className = "pop"; POP.setAttribute("role", "tooltip");
+  POP.innerHTML = `<b>${esc(g.term)}</b>${esc(g.def)}`;
+  document.body.appendChild(POP);
+  const r = btn.getBoundingClientRect(), w = POP.offsetWidth;
+  POP.style.left = Math.max(8, Math.min(window.scrollX + r.left, window.scrollX + document.documentElement.clientWidth - w - 8)) + "px";
+  POP.style.top = (window.scrollY + r.bottom + 6) + "px";
+}
+document.addEventListener("click", e => { const t = e.target.closest(".term"); if (t) { e.preventDefault(); POP && POP.dataset.k === t.dataset.term ? hidePop() : (showPop(t), POP && (POP.dataset.k = t.dataset.term)); } else if (!e.target.closest(".pop")) hidePop(); });
+document.addEventListener("mouseover", e => { const t = e.target.closest(".term"); if (t && matchMedia("(hover:hover)").matches) { showPop(t); if (POP) POP.dataset.k = t.dataset.term; } });
+document.addEventListener("mouseout", e => { if (e.target.closest(".term") && matchMedia("(hover:hover)").matches) hidePop(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { hidePop(); closeAsk(); } });
+
+/* ---------- Simple / Detailed view ---------- */
+function setView(v) {
+  document.body.classList.toggle("simple", v === "simple");
+  document.querySelectorAll("[data-view]").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === v));
+  try { localStorage.setItem("qure-view", v); } catch (e) {}
+}
+function initView() {
+  let v = "simple"; try { v = localStorage.getItem("qure-view") || "simple"; } catch (e) {}
+  setView(v);
+  document.querySelectorAll("[data-view]").forEach(b => b.onclick = () => { setView(b.dataset.view); const adv = ["models", "overview", "data", "handoff"]; if (b.dataset.view === "simple" && adv.includes(ST.page)) location.hash = "#start"; });
+}
+
+/* ---------- report download ---------- */
+const CFG = window.QURE_CONFIG || {};
+async function downloadReport() {
+  if (CFG.reportUrl) return true; // plain link handles it
+  if (!CFG.reportB64) return false;
+  const dl = window.claude?.use ? await window.claude.use("downloads").catch(() => null) : null;
+  if (!dl) { toast("Download isn't available in this view. Open the hosted site, or ask the team for the PDF."); return false; }
+  const bin = atob(CFG.reportB64), buf = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  try { await dl.save({ filename: CFG.reportName || "QURE_Lab_Research_Report.pdf", data: new Blob([buf], { type: "application/pdf" }) }); toast("Report saved"); }
+  catch (e) { if (e?.code !== "declined") toast("The report couldn't be saved here."); }
+  return false;
+}
+function reportLink(cls = "btn", label = "Download the report (PDF)") {
+  if (CFG.reportUrl) return `<a class="${cls}" href="${esc(CFG.reportUrl)}" download style="display:inline-flex;align-items:center;text-decoration:none">${label}</a>`;
+  if (CFG.reportB64) return `<button class="${cls}" type="button" data-report>${label}</button>`;
+  return `<span class="muted small">The report PDF ships with the hosted site.</span>`;
+}
+function initReport() {
+  const a = $("#reportBtn");
+  if (CFG.reportUrl) { a.href = CFG.reportUrl; a.setAttribute("download", ""); a.hidden = false; }
+  else if (CFG.reportB64) { a.hidden = false; a.onclick = e => { e.preventDefault(); downloadReport(); }; }
+  document.addEventListener("click", e => { if (e.target.closest("[data-report]")) { e.preventDefault(); downloadReport(); } });
+}
+
+/* ---------- Start page ---------- */
+function start() {
+  const q = S.quantum_val[0].noiseless, lrt = S.classical_val.role2_logreg_threshold_val_tuned, cmp = S.comparison_val;
+  const rv = relBy("val"), rt = relBy("test");
+  const faq = B.assistant?.faq || [];
+  const picks = ["What is QURE Lab in simple words?", "How is accuracy calculated?", "Is this better than a normal (classical) model?", "What does mitigation cost?", "What is the U flag?", "Can a doctor use this to diagnose patients?"];
+  $("#view").innerHTML = `
+  <section class="hero"><h1>Can we trust a noisy quantum classifier?</h1>
+    <p>QURE Lab runs a small 4-qubit model on real lung-nodule scans from ${B.dataset.patients} patients, adds simulated hardware noise, and shows when that noise changes the answer and what fixing it costs.</p></section>
+  <section class="tasks" aria-label="Common tasks">
+    <a class="task" href="#cases"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><b>Look at one nodule</b><span>See its score with no noise, with noise, and after mitigation, run by run.</span><i>Open cases →</i></a>
+    <a class="task" href="#noise"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h3l2-6 4 12 3-9 2 3h4"/></svg></span><b>See what noise does</b><span>How far scores drift at each noise level, and what the fix costs.</span><i>Open noise →</i></a>
+    <a class="task" href="#accuracy"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/></svg></span><b>Check how accurate it is</b><span>Move the threshold yourself and watch every accuracy number update.</span><i>Open accuracy lab →</i></a>
+  </section>
+  <section class="card"><header><h2>What we found, in plain words</h2><span class="sub">simulated quantum execution · not a medical tool</span></header>
+    <div class="finds">
+      <div class="find"><div class="big">${f3(q.balanced_accuracy)}<small>vs ${f3(lrt.balanced_accuracy)} classical</small></div><div><h3>About as accurate as a simple classical model</h3><p>On 90 validation nodules the quantum model and logistic regression can't be told apart (difference ${cmp.quantum_minus_logreg_ba_val_tuned_both >= 0 ? "+" : ""}${f3(cmp.quantum_minus_logreg_ba_val_tuned_both)}, 95% range ${ci(cmp.paired_bootstrap_ci95)}). We claim no quantum advantage. ${term("Balanced accuracy")} explained in the Accuracy lab.</p></div></div>
+      <div class="find"><div class="big">${pct(rt.N4.mean_flip_rate_noisy)}<small>runs flip at N4</small></div><div><h3>Strong noise changes some decisions</h3><p>At the noisiest setting, ${pct(rt.N4.mean_flip_rate_noisy)} of runs on the 90 test nodules gave a different answer from the noise-free result. Most nodules sit far from the ${term("threshold")}, so most answers hold.</p></div></div>
+      <div class="find"><div class="big">${f3(rv.N4.mean_abs_dev_noisy)}<small>→ ${f3(rv.N4.mean_abs_dev_mitigated)} error</small></div><div><h3>Mitigation helps, at a price</h3><p>Correcting ${term("readout errors", "Readout error")} removes most of the drift, but needs ${B.budget.mitigated_total_shots / B.budget.shots_per_execution}× the ${term("shots", "Shot")} and makes repeated runs wobble more.</p></div></div>
+    </div></section>
+  <div class="grid g2">
+    <section class="card"><header><h2>Common questions</h2><button class="btn" type="button" data-ask="">Ask your own</button></header>
+      <div class="body chips">${picks.filter(p => faq.some(f => f.q === p)).map(p => `<button class="chip" type="button" data-ask="${esc(p)}">${esc(p)}</button>`).join("")}</div></section>
+    <section class="card"><header><h2>Take it with you</h2></header>
+      <div class="body grid"><p class="small muted" style="margin:0">The research report covers the question, data, method, results, limits and a glossary, using the same numbers as this dashboard.</p>
+      <div class="toolbar">${reportLink("btn primary")}${B.vr_url ? `<a class="btn" style="display:inline-flex;align-items:center;text-decoration:none" href="${esc(B.vr_url)}">Open the 3D lab</a>` : ""}</div></div></section>
+  </div>
+  <div class="note">Labels are radiologist suspicion ratings, not confirmed cancer. Test results are pending with Role 2. Switch to <b>Detailed</b> view in the top bar to see every table and confidence interval.</div>`;
+}
+
+/* ---------- Accuracy lab: change the threshold / result type and see how accuracy is computed ---------- */
+function auc(y, s) { // probability a random high case scores above a random low case (ties count half)
+  const pos = [], neg = []; y.forEach((v, i) => (v ? pos : neg).push(s[i]));
+  let w = 0; for (const p of pos) for (const n of neg) w += p > n ? 1 : p === n ? 0.5 : 0;
+  return w / (pos.length * neg.length);
+}
+const AL = { model: "quantum", result: "noiseless", setting: "N4", thr: null, log: [] };
+const ALnames = { quantum: "Quantum", lr: "Logistic regression", noiseless: "No noise", noisy: "Noisy", mitigated: "Mitigated" };
+function accState() {
+  const frozen = B.model.threshold, isQ = AL.model === "quantum";
+  const val = B.cases.filter(c => c.split === "val");
+  const score = c => !isQ ? c.lr : AL.result === "noiseless" ? c.nl : mean(AL.result === "noisy" ? c.S[AL.setting].n : c.S[AL.setting].m);
+  const y = val.map(c => c.label), s = val.map(score), t = AL.thr;
+  const cm = th => { let tp = 0, fn = 0, fp = 0, tn = 0; y.forEach((l, i) => { const h = s[i] >= th; if (l && h) tp++; else if (l) fn++; else if (h) fp++; else tn++; }); return { tp, fn, fp, tn, sens: tp / (tp + fn), spec: tn / (tn + fp), ba: (tp / (tp + fn) + tn / (tn + fp)) / 2 }; };
+  const now = cm(t), ref = cm(isQ ? frozen : 0.5);
+  const wrong = val.map((c, i) => ({ c, s: s[i] })).filter(({ c, s }) => (s >= t ? 1 : 0) !== c.label);
+  return { frozen, isQ, val, y, s, t, ...now, ref, auc: auc(y, s), wrong,
+    desc: isQ ? `Quantum · ${AL.result === "noiseless" ? "no noise" : `${AL.result} ${AL.setting} (average of 5 runs)`}` : "Logistic regression (Role 2)" };
+}
+function accLog(what) {
+  const a = accState();
+  AL.log.push({ time: new Date(), what, ba: a.ba, sens: a.sens, spec: a.spec, thr: a.t, desc: a.desc });
+  if (AL.log.length > 60) AL.log.splice(1, 1);
+  const n = $("#lognum"); if (n) n.textContent = `${AL.log.length} change${AL.log.length === 1 ? "" : "s"} recorded`;
+}
+function accuracy() {
+  const frozen = B.model.threshold;
+  if (AL.thr == null) { AL.thr = frozen; }
+  if (!AL.log.length) accLog("Opened the Accuracy lab");
+  const isQ = AL.model === "quantum";
+  const segM = [["quantum", "Quantum"], ["lr", "Logistic regression"]].map(([k, n]) => `<button type="button" data-m="${k}" aria-pressed="${AL.model === k}">${n}</button>`).join("");
+  const segR = [["noiseless", "No noise"], ["noisy", "Noisy"], ["mitigated", "Mitigated"]].map(([k, n]) => `<button type="button" data-r="${k}" aria-pressed="${AL.result === k}" ${isQ ? "" : "disabled"}>${n}</button>`).join("");
+  const segN = B.noise_settings.filter(n => n.id !== "N0").map(n => `<button type="button" data-n="${n.id}" aria-pressed="${AL.setting === n.id}" ${isQ && AL.result !== "noiseless" ? "" : "disabled"}><span class="k">${n.id}</span></button>`).join("");
+  $("#view").innerHTML = `
+  <div class="ph"><div><h1>Accuracy lab</h1><p>Change one thing at a time and watch how the accuracy is worked out. Uses the 90 validation nodules, whose labels are known. Nothing here changes the frozen model.</p></div>
+    <div class="toolbar"><span class="small muted" id="lognum"></span><button class="btn primary icon" type="button" id="accpdf"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>Download PDF of this result</button></div></div>
+  <div class="lab">
+    <section class="card"><header><h2>Change something</h2></header><div class="body ctl">
+      <div><label class="h">Model</label><div class="seg" role="group" aria-label="Model">${segM}</div></div>
+      <div><label class="h">Result to score ${isQ ? "" : "(quantum only)"}</label><div class="seg" role="group" aria-label="Result">${segR}</div></div>
+      <div><label class="h">Noise setting ${isQ && AL.result !== "noiseless" ? "(average of 5 runs)" : ""}</label><div class="seg" role="group" aria-label="Noise setting">${segN}</div></div>
+      <div><div class="thr"><label class="h" for="thr">${term("Threshold")}</label><span class="v" id="thrv">${AL.thr.toFixed(2)}</span></div>
+        <input id="thr" type="range" min="0.05" max="0.95" step="0.01" value="${AL.thr}" aria-describedby="thrhelp">
+        <div class="toolbar" style="justify-content:space-between"><span class="small muted" id="thrhelp">Frozen value: ${isQ ? frozen : "0.50 (Role 2)"}</span><button class="btn" type="button" id="thrreset">Reset</button></div></div>
+      <p class="small muted" style="margin:0">Picking a threshold by looking at these same cases makes the number look better than it would on new patients. That is why the official threshold stays frozen.</p>
+      <p class="small muted" style="margin:0">Every change you make is recorded. The PDF includes the current result and the full list of changes.</p>
+    </div></section>
+    <div class="grid" id="accres"></div>
+  </div>`;
+  renderAccResult();
+  $("#lognum").textContent = `${AL.log.length} change${AL.log.length === 1 ? "" : "s"} recorded`;
+  const relabel = () => accuracy();
+  document.querySelectorAll("[data-m]").forEach(b => b.onclick = () => { if (AL.model === b.dataset.m) return; AL.model = b.dataset.m; AL.thr = AL.model === "lr" ? 0.5 : frozen; accLog(`Model → ${ALnames[AL.model]}`); relabel(); });
+  document.querySelectorAll("[data-r]").forEach(b => b.onclick = () => { if (AL.result === b.dataset.r) return; AL.result = b.dataset.r; accLog(`Result → ${ALnames[AL.result]}${AL.result === "noiseless" ? "" : " " + AL.setting}`); relabel(); });
+  document.querySelectorAll("[data-n]").forEach(b => b.onclick = () => { if (AL.setting === b.dataset.n) return; AL.setting = b.dataset.n; accLog(`Noise setting → ${AL.setting}`); relabel(); });
+  let startThr = AL.thr;
+  const sl = $("#thr");
+  sl.onpointerdown = sl.onfocus = () => { startThr = AL.thr; };
+  sl.oninput = e => { AL.thr = Number(e.target.value); $("#thrv").textContent = AL.thr.toFixed(2); renderAccResult(); };
+  sl.onchange = () => { if (Math.abs(AL.thr - startThr) > 1e-9) { accLog(`Threshold ${startThr.toFixed(2)} → ${AL.thr.toFixed(2)}`); startThr = AL.thr; } };
+  $("#thrreset").onclick = () => { const to = isQ ? frozen : 0.5; if (Math.abs(AL.thr - to) < 1e-9) return; const from = AL.thr; AL.thr = to; accLog(`Threshold reset ${from.toFixed(2)} → ${to.toFixed(2)}`); relabel(); };
+  $("#accpdf").onclick = accPdf;
+}
+function renderAccResult() {
+  const a = accState(), d = a.ba - a.ref.ba;
+  $("#accres").innerHTML = `
+      <section class="card"><header><h2>Result on 90 validation nodules</h2><span class="sub">${esc(a.desc)} · threshold ${a.t.toFixed(2)}</span></header>
+        <div class="body grid">
+          <div class="mets">
+            <div class="met"><span>${term("Balanced accuracy")}</span><b>${f3(a.ba)}</b><small class="${d > 0.0005 ? "up" : d < -0.0005 ? "down" : ""}">${Math.abs(d) < 0.0005 ? "same as frozen threshold" : (d > 0 ? "+" : "") + f3(d) + " vs frozen"}</small></div>
+            <div class="met"><span>${term("Sensitivity")}</span><b>${f3(a.sens)}</b><small>${a.tp} of ${a.tp + a.fn} high found</small></div>
+            <div class="met"><span>${term("Specificity")}</span><b>${f3(a.spec)}</b><small>${a.tn} of ${a.tn + a.fp} low cleared</small></div>
+            <div class="met"><span>${term("AUC")}</span><b>${f3(a.auc)}</b><small>same at any threshold</small></div>
+          </div>
+          <div class="cm" role="table" aria-label="Confusion matrix">
+            <span></span><span class="hd">Model says high</span><span class="hd">Model says low</span>
+            <span class="rowh">Really high (${a.tp + a.fn})</span><div class="cell good"><b>${a.tp}</b>correctly called high</div><div class="cell badc"><b>${a.fn}</b>missed (false low)</div>
+            <span class="rowh">Really low (${a.tn + a.fp})</span><div class="cell badc"><b>${a.fp}</b>false alarm</div><div class="cell good"><b>${a.tn}</b>correctly called low</div>
+          </div>
+          <div class="formula">sensitivity = ${a.tp} ÷ ${a.tp + a.fn} = ${f3(a.sens)}<br>specificity = ${a.tn} ÷ ${a.tn + a.fp} = ${f3(a.spec)}<br>balanced accuracy = (${f3(a.sens)} + ${f3(a.spec)}) ÷ 2 = <b>${f3(a.ba)}</b></div>
+        </div></section>
+      <section class="card"><header><h2>Where each nodule lands</h2><span class="sub">dots = nodules · line = threshold</span></header>
+        <div class="body"><div id="dots"></div>${legend([["really high", "--bad"], ["really low", "--ok"]])}</div></section>`;
+  const host = $("#dots"), W = 560, H = 120, m = { l: 70, r: 14 }, x = v => m.l + Math.max(0, Math.min(1, v)) * (W - m.l - m.r);
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img", "aria-label": "Scores of validation nodules against the threshold" });
+  [0, .25, .5, .75, 1].forEach(v => { el("line", { x1: x(v), x2: x(v), y1: 10, y2: 92, class: "grid" }, svg); txt(svg, x(v), 110, v.toFixed(2), { "text-anchor": "middle" }); });
+  txt(svg, 6, 34, "really high", { "text-anchor": "start" }); txt(svg, 6, 74, "really low", { "text-anchor": "start" });
+  a.val.forEach((c, i) => { const hi = c.label === 1, jitter = ((i * 37) % 13) - 6; el("circle", { cx: x(a.s[i]), cy: (hi ? 30 : 70) + jitter, r: 3.6, fill: `var(${hi ? "--bad" : "--ok"})`, "fill-opacity": .8 }, svg); });
+  el("line", { x1: x(a.t), x2: x(a.t), y1: 4, y2: 96, stroke: "var(--fg)", "stroke-width": 1.6, "stroke-dasharray": "4 3" }, svg);
+  host.appendChild(svg);
+}
+
+/* PDF of the current Accuracy-lab result + every change made in this visit (jsPDF, bundled inline) */
+async function accPdf() {
+  const J = window.jspdf && window.jspdf.jsPDF;
+  if (!J) { toast("The PDF tool didn't load in this view."); return; }
+  const a = accState(), doc = new J({ unit: "mm", format: "a4" });
+  const ink = [20, 32, 27], muted = [90, 101, 96], acc = [0, 135, 90], hi = [210, 63, 63], lo = [15, 138, 90], line = [214, 221, 217];
+  const W = 210, L = 18, R = W - 18; let y = 18;
+  const T = (s, x, yy, o = {}) => { doc.setFont("helvetica", o.b ? "bold" : "normal"); doc.setFontSize(o.size || 10); doc.setTextColor(...(o.c || ink)); doc.text(String(s), x, yy, o.align ? { align: o.align, maxWidth: o.w } : o.w ? { maxWidth: o.w } : undefined); };
+  const asc = s => String(s).replace(/→/g, "->").replace(/÷/g, "/").replace(/−/g, "-").replace(/·/g, "|").replace(/–|—/g, "-");
+  const needs = h => { if (y + h > 280) { doc.addPage(); y = 18; } };
+  const stamp = new Date();
+  // header
+  T("QURE Lab", L, y, { b: 1, size: 20 }); T("Accuracy lab result", L + 42, y, { size: 13, c: muted });
+  y += 6; T(`Generated ${stamp.toLocaleString()} | model ${B.model.model_id} (${B.model.param_version}) | bundle ${B.bundle_version}`, L, y, { size: 8, c: muted });
+  y += 4; doc.setDrawColor(...acc); doc.setLineWidth(0.8); doc.line(L, y, R, y); y += 8;
+  // settings
+  T("What was scored", L, y, { b: 1, size: 12 }); y += 6;
+  const rows = [["Data", "90 validation nodules (labels known); test labels are held by Role 2"], ["Model", a.isQ ? "4-qubit quantum classifier (frozen weights)" : "Logistic regression from Role 2"],
+    ["Result", asc(a.desc)], ["Threshold", `${a.t.toFixed(2)}  (frozen value ${a.isQ ? a.frozen : "0.50"})`]];
+  rows.forEach(([k, v]) => { T(k, L, y, { c: muted }); T(v, L + 32, y, { w: R - L - 32 }); y += 5.5; });
+  y += 3;
+  // metrics
+  T("Result", L, y, { b: 1, size: 12 }); y += 3;
+  const mets = [["Balanced accuracy", a.ba], ["Sensitivity", a.sens], ["Specificity", a.spec], ["AUC", a.auc]];
+  const bw = (R - L - 9) / 4;
+  mets.forEach(([k, v], i) => { const x = L + i * (bw + 3); doc.setDrawColor(...line); doc.setLineWidth(0.3); doc.roundedRect(x, y, bw, 17, 1.5, 1.5); T(k, x + 3, y + 5.5, { size: 8, c: muted }); T(f3(v), x + 3, y + 13, { b: 1, size: 15 }); });
+  y += 21;
+  const d = a.ba - a.ref.ba;
+  T(Math.abs(d) < 0.0005 ? "Same balanced accuracy as at the frozen threshold." : `Balanced accuracy is ${d > 0 ? "+" : ""}${f3(d)} compared with the frozen threshold (${f3(a.ref.ba)}).`, L, y, { size: 9, c: muted }); y += 8;
+  // confusion matrix
+  needs(52);
+  T("Confusion matrix", L, y, { b: 1, size: 12 }); y += 4;
+  const cx = L + 34, cw = 50, ch = 18;
+  T("Model says high", cx + cw / 2, y + 3, { size: 8, c: muted, align: "center" }); T("Model says low", cx + cw + 3 + cw / 2, y + 3, { size: 8, c: muted, align: "center" }); y += 5;
+  const cell = (x, yy, n, lab, good) => { doc.setFillColor(...(good ? [221, 241, 230] : [249, 226, 221])); doc.roundedRect(x, yy, cw, ch, 1.5, 1.5, "F"); T(String(n), x + 4, yy + 9, { b: 1, size: 16 }); T(lab, x + 4, yy + 15, { size: 8, c: muted }); };
+  T(`Really high (${a.tp + a.fn})`, L, y + 10, { size: 8, c: muted }); cell(cx, y, a.tp, "correctly called high", 1); cell(cx + cw + 3, y, a.fn, "missed (false low)", 0); y += ch + 3;
+  T(`Really low (${a.tn + a.fp})`, L, y + 10, { size: 8, c: muted }); cell(cx, y, a.fp, "false alarm", 0); cell(cx + cw + 3, y, a.tn, "correctly called low", 1); y += ch + 7;
+  // formula
+  needs(24);
+  doc.setFillColor(241, 244, 242); doc.roundedRect(L, y, R - L, 19, 1.5, 1.5, "F");
+  doc.setFont("courier", "normal"); doc.setFontSize(9); doc.setTextColor(...ink);
+  doc.text(`sensitivity       = ${a.tp} / ${a.tp + a.fn} = ${f3(a.sens)}`, L + 4, y + 5.5);
+  doc.text(`specificity       = ${a.tn} / ${a.tn + a.fp} = ${f3(a.spec)}`, L + 4, y + 10.5);
+  doc.text(`balanced accuracy = (${f3(a.sens)} + ${f3(a.spec)}) / 2 = ${f3(a.ba)}`, L + 4, y + 15.5); y += 26;
+  // dot plot
+  needs(46);
+  T("Where each nodule lands", L, y, { b: 1, size: 12 }); y += 5;
+  const px0 = L + 24, pw = R - px0 - 2, X = v => px0 + Math.max(0, Math.min(1, v)) * pw, top = y;
+  doc.setDrawColor(...line); doc.setLineWidth(0.2);
+  [0, .25, .5, .75, 1].forEach(v => { doc.line(X(v), top, X(v), top + 26); T(v.toFixed(2), X(v), top + 31, { size: 7, c: muted, align: "center" }); });
+  T("really high", L, top + 8, { size: 8, c: muted }); T("really low", L, top + 20, { size: 8, c: muted });
+  a.val.forEach((c, i) => { const h = c.label === 1, j = (((i * 37) % 13) - 6) * 0.35; doc.setFillColor(...(h ? hi : lo)); doc.circle(X(a.s[i]), top + (h ? 7 : 19) + j, 0.9, "F"); });
+  doc.setDrawColor(...ink); doc.setLineWidth(0.5); doc.setLineDashPattern([1.2, 1], 0); doc.line(X(a.t), top - 1, X(a.t), top + 27); doc.setLineDashPattern([], 0);
+  T(`threshold ${a.t.toFixed(2)}`, X(a.t) + 1.5, top + 1.5, { size: 7 });
+  y = top + 38;
+  // misclassified
+  needs(20);
+  T(`Nodules on the wrong side of the threshold (${a.wrong.length})`, L, y, { b: 1, size: 12 }); y += 6;
+  const wr = a.wrong.sort((p, q) => p.s - q.s);
+  const colW = (R - L) / 3;
+  wr.forEach((w, i) => { const col = i % 3; if (col === 0 && i) y += 4.6; needs(6); T(`${w.c.patient}  ${f3(w.s)}  ${w.c.label ? "really high" : "really low"}`, L + col * colW, y, { size: 8 }); });
+  y += 10;
+  // change log
+  needs(24);
+  T(`Changes made in this visit (${AL.log.length})`, L, y, { b: 1, size: 12 }); y += 6;
+  T("Time", L, y, { size: 8, c: muted, b: 1 }); T("Change", L + 20, y, { size: 8, c: muted, b: 1 }); T("Threshold", L + 112, y, { size: 8, c: muted, b: 1 }); T("Bal. acc.", L + 134, y, { size: 8, c: muted, b: 1 }); T("Sens. / Spec.", L + 152, y, { size: 8, c: muted, b: 1 });
+  y += 2; doc.setDrawColor(...line); doc.line(L, y, R, y); y += 4;
+  AL.log.forEach(e => { needs(6); T(e.time.toLocaleTimeString(), L, y, { size: 8 }); T(asc(e.what), L + 20, y, { size: 8, w: 90 }); T(e.thr.toFixed(2), L + 112, y, { size: 8 }); T(f3(e.ba), L + 134, y, { size: 8, b: 1 }); T(`${f3(e.sens)} / ${f3(e.spec)}`, L + 152, y, { size: 8 }); y += 5; });
+  y += 4;
+  // notes
+  needs(30);
+  T("How to read this", L, y, { b: 1, size: 12 }); y += 6;
+  ["Balanced accuracy is the average of sensitivity and specificity, so it stays fair when one group is larger.",
+   "AUC does not depend on the threshold: it measures how well scores rank really-high nodules above really-low ones.",
+   "Choosing a threshold by looking at these same 90 cases makes results look better than they would on new patients. The official threshold stays frozen.",
+   "Noisy and mitigated results are averages of 5 simulated runs of 2000 shots each, under hypothetical noise settings.",
+   "Labels are radiologist suspicion ratings, not confirmed cancer. Research prototype on simulated quantum hardware; not for diagnosis."].forEach(t => { needs(10); doc.setFont("helvetica", "normal"); doc.setFontSize(9); const lines = doc.splitTextToSize("- " + t, R - L); doc.setTextColor(...muted); doc.text(lines, L, y); y += lines.length * 4.4 + 1; });
+  const pages = doc.getNumberOfPages();
+  for (let i = 1; i <= pages; i++) { doc.setPage(i); T(`QURE Lab | Accuracy lab | simulated quantum execution | not a medical device`, L, 290, { size: 7, c: muted }); T(`${i} / ${pages}`, R, 290, { size: 7, c: muted, align: "right" }); }
+  const name = `QURE_accuracy_${a.isQ ? (AL.result === "noiseless" ? "quantum_noiseless" : `quantum_${AL.result}_${AL.setting}`) : "logreg"}_thr${a.t.toFixed(2)}.pdf`;
+  // claude.ai viewer: use the downloads capability; elsewhere a normal browser download
+  const dl = window.claude?.use ? await window.claude.use("downloads").catch(() => null) : null;
+  if (dl) {
+    try { await dl.save({ filename: name, data: doc.output("blob") }); toast("PDF saved"); }
+    catch (e) { if (e?.code !== "declined") toast("The PDF couldn't be saved in this view."); }
+  } else if (window.claude?.use) { toast("Downloads aren't available in this view."); }
+  else { doc.save(name); toast("PDF downloaded"); }
+}
+
+/* ---------- Help & FAQ ---------- */
+function help() {
+  const faq = B.assistant?.faq || [], gl = B.assistant?.glossary || [];
+  const topics = [...new Set(faq.map(f => f.topic))];
+  $("#view").innerHTML = `
+  <div class="ph"><div><h1>Help &amp; FAQ</h1><p>Short answers to the questions people ask most. Can't find yours? Ask QURE.</p></div><button class="btn primary" type="button" data-ask="">Ask QURE</button></div>
+  <label class="field" for="fq" style="max-width:420px"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="fq" type="search" placeholder="Search questions" style="width:100%"></label>
+  ${topics.map(tp => `<section class="card" data-topic><header><h2>${esc(tp)}</h2></header><div>${faq.filter(f => f.topic === tp).map(f => `<details class="faq" data-text="${esc((f.q + " " + f.a).toLowerCase())}"><summary>${esc(f.q)}</summary><div class="a">${esc(f.a)} <a href="#${f.page}">Open ${esc(PAGES[f.page] || f.page)} →</a></div></details>`).join("")}</div></section>`).join("")}
+  <section class="card"><header><h2>Glossary</h2></header><div class="gl">${gl.map(g => `<div><b>${esc(g.term)}</b><span>${esc(g.def)}</span></div>`).join("")}</div></section>`;
+  $("#fq").oninput = e => {
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("details.faq").forEach(d => { const hit = !q || d.dataset.text.includes(q); d.hidden = !hit; if (q && hit) d.open = true; });
+    document.querySelectorAll("[data-topic]").forEach(sec => sec.hidden = ![...sec.querySelectorAll("details.faq")].some(d => !d.hidden));
+  };
+}
+
+/* ---------- Ask QURE assistant ----------
+   Order: 1) built-in guide answers (instant, offline, always available)
+          2) AI: the site's /api/ask proxy (Gemini, then Grok, keys stay on the server)
+             or, inside a claude.ai viewer, Claude via the page's `sample` capability
+          3) if no AI is reachable, the closest guide answers.                                      */
+const STOP = new Set("a an the is are was were be to of in on for and or it this that what how why do does did can i we you my our me about with from at by as its into than then there their which who whom whose will would should could".split(" "));
+const words = t => String(t).toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter(w => w && !STOP.has(w));
+function guideMatch(q) {
+  const qs = new Set(words(q)); if (!qs.size) return [];
+  return (B.assistant?.faq || []).map(f => {
+    let sc = 0; const fq = new Set(words(f.q));
+    for (const w of qs) { if (f.kw.includes(w)) sc += 2; if (fq.has(w)) sc += 1.5; }
+    if (f.q.toLowerCase() === q.trim().toLowerCase()) sc += 10;
+    return { f, sc: sc / Math.sqrt(qs.size + 1) };
+  }).filter(x => x.sc > 0).sort((a, b) => b.sc - a.sc);
+}
+function glossaryMatch(q) {
+  const m = q.toLowerCase().match(/what(?:'s| is| are| does)\s+(?:an?\s+|the\s+)?(.+?)\??$/);
+  if (!m) return null;
+  return (B.assistant?.glossary || []).find(g => g.term.toLowerCase() === m[1].trim() || g.term.toLowerCase().startsWith(m[1].trim()));
+}
+const AI = { history: [], ctl: null, sample: undefined, endpointOk: !!(CFG.aiEndpoint && /^https?:/.test(location.protocol)) };
+async function probeEndpoint() {
+  if (!AI.endpointOk) return false;
+  try {
+    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 4000);
+    const r = await fetch(CFG.aiEndpoint, { signal: ctl.signal }); clearTimeout(t);
+    const j = r.ok ? await r.json() : null;
+    AI.endpointOk = !!(j && j.providers && (j.providers.gemini || j.providers.grok));
+  } catch (e) { AI.endpointOk = false; }
+  return AI.endpointOk;
+}
+async function aiAvailable() {
+  if (AI.endpointOk) return "server";
+  if (AI.sample === undefined) AI.sample = window.claude?.use ? await window.claude.use("sample").catch(() => null) : null;
+  return AI.sample ? "claude" : null;
+}
+function md(t) { // tiny safe renderer: escape, **bold**, paragraphs, "Open: Page" -> button
+  let open = null;
+  const lines = String(t).split("\n").filter(l => { const m = l.match(/^\s*Open:\s*(.+?)\s*$/i); if (m) { open = m[1]; return false; } return true; });
+  const html = esc(lines.join("\n")).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+  const key = open && Object.entries(PAGES).find(([, n]) => n.toLowerCase() === open.toLowerCase().replace(/[.]$/, ""));
+  return { html, page: key ? key[0] : null };
+}
+function addMsg(role, html, extra = {}) {
+  const d = document.createElement("div"); d.className = `msg ${role}`; d.innerHTML = html;
+  if (extra.src) d.insertAdjacentHTML("beforeend", `<span class="src">${esc(extra.src)}</span>`);
+  if (extra.acts?.length) d.insertAdjacentHTML("beforeend", `<div class="acts">${extra.acts.join("")}</div>`);
+  $("#msgs").appendChild(d); $("#msgs").scrollTop = $("#msgs").scrollHeight; return d;
+}
+function gotoBtn(page) { return `<button class="chip" type="button" data-goto="${page}">Open ${esc(PAGES[page])} →</button>`; }
+function caseContext() {
+  if (ST.page !== "cases" || !ST.sel) return null;
+  const c = B.cases.find(x => x.id === ST.sel); if (!c) return null;
+  const d = c.S[ST.setting];
+  return { id: c.id, split: c.split, label: c.split === "test" ? null : c.label, setting: ST.setting, noiseless: c.nl, noisy_mean: mean(d.n), mitigated_mean: mean(d.m), flag_U: d.f };
+}
+async function askAI(q, bubble) {
+  const mode = await aiAvailable();
+  if (!mode) return false;
+  const turns = AI.history.slice(-6);
+  if (mode === "server") {
+    AI.ctl = new AbortController();
+    try {
+      const r = await fetch(CFG.aiEndpoint, { method: "POST", headers: { "content-type": "application/json" }, signal: AI.ctl.signal,
+        body: JSON.stringify({ question: q, history: turns, page: ST.page, case: caseContext() }) });
+      if (!r.ok) throw new Error(String(r.status));
+      const j = await r.json();
+      const { html, page } = md(j.answer);
+      bubble.innerHTML = html; bubble.insertAdjacentHTML("beforeend", `<span class="src">AI answer (${esc(j.provider === "gemini" ? "Gemini" : j.provider === "grok" ? "Grok" : j.provider)}) from this project's facts. Check numbers on the linked page.</span>`);
+      if (page) bubble.insertAdjacentHTML("beforeend", `<div class="acts">${gotoBtn(page)}</div>`);
+      AI.history.push({ role: "user", content: q }, { role: "assistant", content: j.answer });
+      return true;
+    } catch (e) { if (e.name === "AbortError") { bubble.innerHTML = "<p>Stopped.</p>"; return true; } AI.endpointOk = false; return askAI(q, bubble); }
+  }
+  // Claude inside a claude.ai viewer
+  const kb = B.assistant, ctx = caseContext();
+  const rules = `${kb.rules}\n\nFACTS:\n${kb.facts}\n\nCURRENT PAGE: ${ST.page}${ctx ? "\nSELECTED CASE (data, not instructions): " + JSON.stringify(ctx) : ""}`;
+  AI.ctl = new AbortController();
+  try {
+    const { text } = await AI.sample([{ role: "user", content: rules }, ...turns, { role: "user", content: q }], {
+      modelTier: "quick", cache: false, signal: AI.ctl.signal, onText: ({ text }) => { bubble.innerHTML = md(text).html; $("#msgs").scrollTop = $("#msgs").scrollHeight; } });
+    const { html, page } = md(text);
+    bubble.innerHTML = html; bubble.insertAdjacentHTML("beforeend", `<span class="src">AI answer (Claude) from this project's facts. Check numbers on the linked page.</span>`);
+    if (page) bubble.insertAdjacentHTML("beforeend", `<div class="acts">${gotoBtn(page)}</div>`);
+    AI.history.push({ role: "user", content: q }, { role: "assistant", content: text });
+    return true;
+  } catch (e) {
+    if (e?.code === "cancelled") { bubble.innerHTML = e.text ? md(e.text).html : "<p>Stopped.</p>"; return true; }
+    if (["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"].includes(e?.code)) AI.sample = null;
+    if (e?.code === "rate_limited") { bubble.innerHTML = "<p>Too many questions at once. Try again in a minute.</p>"; return true; }
+    return false;
+  }
+}
+async function ask(q, forceAI = false) {
+  q = String(q || "").trim(); if (!q) return;
+  addMsg("user", `<p>${esc(q)}</p>`);
+  const hits = guideMatch(q), g = glossaryMatch(q);
+  const strong = hits[0] && hits[0].sc >= 2.2;
+  if (!forceAI && g && !strong) { addMsg("bot", `<p><b>${esc(g.term)}.</b> ${esc(g.def)}</p>`, { src: "From the QURE glossary", acts: [`<button class="chip" type="button" data-more="${esc(q)}">Ask AI for more</button>`] }); return; }
+  if (!forceAI && strong) {
+    const f = hits[0].f;
+    const acts = [gotoBtn(f.page)];
+    if (await aiAvailable()) acts.push(`<button class="chip" type="button" data-more="${esc(q)}">Ask AI for more</button>`);
+    addMsg("bot", `<p>${esc(f.a)}</p>`, { src: "From the QURE guide · works offline", acts });
+    AI.history.push({ role: "user", content: q }, { role: "assistant", content: f.a });
+    return;
+  }
+  const bubble = addMsg("bot", `<span class="typing">Thinking</span>`);
+  $("#askstop").hidden = false; $("#asksend").disabled = true;
+  const ok = await askAI(q, bubble);
+  $("#askstop").hidden = true; $("#asksend").disabled = false;
+  if (!ok) {
+    const near = hits.slice(0, 3).map(h => `<button class="chip" type="button" data-ask="${esc(h.f.q)}">${esc(h.f.q)}</button>`).join("");
+    bubble.innerHTML = near ? `<p>I don't have an exact answer. These are the closest questions I can answer:</p>` : `<p>I can only answer questions about QURE Lab's data, method, results and this dashboard. Try one of the common questions on Start or Help.</p>`;
+    if (near) bubble.insertAdjacentHTML("beforeend", `<div class="acts">${near}</div>`);
+    bubble.insertAdjacentHTML("beforeend", `<span class="src">AI isn't connected in this view, so only the built-in guide answers.</span>`);
+  }
+}
+function openAsk(q) {
+  const d = $("#drawer"); d.hidden = false; $("#fab").setAttribute("aria-expanded", "true"); $("#fab").hidden = true;
+  if (!$("#msgs").children.length) greet();
+  if (q) ask(q); else $("#askq").focus();
+}
+function closeAsk() { const d = $("#drawer"); if (!d || d.hidden) return; d.hidden = true; $("#fab").hidden = false; $("#fab").setAttribute("aria-expanded", "false"); $("#fab").focus(); }
+function greet() {
+  const faq = B.assistant?.faq || [];
+  const pick = ["Where do I start?", "How is accuracy calculated?", "What does noise do to the answer?", "What is the test accuracy?"].filter(p => faq.some(f => f.q === p));
+  addMsg("bot", `<p>Hi! I answer questions about QURE Lab: the data, how accuracy works, what noise and mitigation do, and how to use this dashboard. I don't give medical advice.</p>`, { acts: pick.map(p => `<button class="chip" type="button" data-ask="${esc(p)}">${esc(p)}</button>`) });
+}
+async function initAssistant() {
+  $("#fab").onclick = () => openAsk();
+  $("#aiclose").onclick = closeAsk;
+  $("#aiclear").onclick = () => { $("#msgs").innerHTML = ""; AI.history = []; greet(); };
+  $("#askform").onsubmit = e => { e.preventDefault(); const q = $("#askq").value; $("#askq").value = ""; ask(q); };
+  $("#askstop").onclick = () => AI.ctl?.abort();
+  document.addEventListener("click", e => {
+    const a = e.target.closest("[data-ask]"); if (a) { e.preventDefault(); openAsk(a.dataset.ask); return; }
+    const m = e.target.closest("[data-more]"); if (m) { ask(m.dataset.more, true); return; }
+    const g = e.target.closest("[data-goto]"); if (g) { location.hash = "#" + g.dataset.goto; if (matchMedia("(max-width:860px)").matches) closeAsk(); }
+  });
+  document.addEventListener("keydown", e => { if (e.key === "?" && !/input|textarea/i.test(document.activeElement?.tagName)) { e.preventDefault(); openAsk(); } });
+  await probeEndpoint();
+  const mode = await aiAvailable();
+  $("#aimode").textContent = mode === "server" ? "guide + AI" : mode === "claude" ? "guide + Claude" : "guide";
+}
+
+const RENDER = { start, overview, cases, noise, accuracy, models, data, method, handoff, help };
+function route() {
+  let p = (location.hash || "#start").slice(1);
+  if (!RENDER[p]) p = "start";
+  ST.page = p; hidePop();
+  document.querySelectorAll("#nav a, #mobnav a").forEach(a => a.setAttribute("aria-current", a.dataset.p === p ? "page" : "false"));
+  $("#crumb").textContent = PAGES[p];
+  RENDER[p]();
+  window.scrollTo(0, 0);
+}
+
+load().then(b => {
+  B = b; S = b.summary;
+  $("#ncases").textContent = b.cases.length;
+  const ADV = new Set(["models", "overview", "data", "handoff"]);
+  $("#mobnav").innerHTML = Object.entries(PAGES).map(([k, n]) => `<a href="#${k}" data-p="${k}"${ADV.has(k) ? ' class="adv"' : ""}>${esc(n)}</a>`).join("");
+  initView(); initReport(); initAssistant();
+  $("#sidefoot").innerHTML = `<div class="row"><span>Qiskit</span><span>${esc(b.environment.qiskit || "")}</span></div><div class="row"><span>Aer</span><span>${esc(b.environment.qiskit_aer || "")}</span></div><div class="row"><span>Repeats × shots</span><span>${b.repeats} × ${b.budget.shots_per_execution}</span></div>`;
+  if (b.vr_url) { const a = $("#vrlink"); a.href = b.vr_url; a.hidden = false; }
+  window.addEventListener("hashchange", route);
+  route();
+}).catch(e => { $("#view").innerHTML = `<div class="note"><b>Could not load results.</b> ${esc(e.message)}</div>`; });
+
+$("#theme").onclick = () => {
+  const root = document.documentElement;
+  const dark = root.dataset.theme ? root.dataset.theme === "dark" : !matchMedia("(prefers-color-scheme: light)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+  try { localStorage.setItem("qure-theme", root.dataset.theme); } catch (e) {}
+};
+</script>
+</body>
+</html>

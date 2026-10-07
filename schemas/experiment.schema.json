@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/beniel292-ops/IBM-bin/schemas/experiment.schema.json",
+  "title": "QURE Lab experiment record (one case x one noise setting)",
+  "description": "PROPOSED v0.1.0 by Role 1. Roles 2 and 3 must confirm before relying on it. Role 2 fills calibrated_probability and classical_baseline when merging.",
+  "type": "object",
+  "required": ["schema_version", "run_id", "data_status", "result_type", "case_id", "patient_group_id",
+               "split", "dataset", "reference_label", "features", "encoding", "model", "circuit", "noise",
+               "mitigation", "execution", "outputs", "calibrated_probability", "classical_baseline"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "run_id": {"type": "string", "minLength": 3},
+    "data_status": {"enum": ["synthetic-fixture", "real"]},
+    "result_type": {"enum": ["simulated", "hardware"]},
+    "simulator": {"type": "string"},
+    "case_id": {"type": "string"},
+    "patient_group_id": {"type": "string"},
+    "split": {"enum": ["train", "val", "test"]},
+    "dataset": {
+      "type": "object",
+      "required": ["dataset_source", "dataset_version", "label_definition", "label_positive_meaning"]
+    },
+    "reference_label": {"enum": [0, 1, null]},
+    "features": {
+      "type": "object",
+      "required": ["names", "values", "preprocessing_version"],
+      "properties": {
+        "names": {"type": "array", "items": {"type": "string"}, "minItems": 4, "maxItems": 4},
+        "values": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4}
+      }
+    },
+    "encoding": {"type": "object", "required": ["method", "angles_rad"]},
+    "model": {
+      "type": "object",
+      "required": ["model_id", "param_version", "layers", "entangling", "n_trainable_params", "trained_on"]
+    },
+    "circuit": {
+      "type": "object",
+      "required": ["n_qubits", "transpiled_depth", "transpiled_ops", "observable", "output"],
+      "properties": {"n_qubits": {"const": 4}}
+    },
+    "noise": {
+      "type": "object",
+      "required": ["setting_id", "label", "params", "source"],
+      "properties": {
+        "params": {
+          "type": "object",
+          "required": ["p1q", "p2q", "readout_p10", "readout_p01"]
+        }
+      }
+    },
+    "mitigation": {"type": "object", "required": ["method", "targets", "assumption", "nonphysical_policy", "calibration_shots_total"]},
+    "execution": {"type": "object", "required": ["shots", "repeats", "seeds", "budget"]},
+    "outputs": {
+      "type": "object",
+      "required": ["score_definition", "decision_threshold", "threshold_source", "noiseless_exact", "noisy_exact",
+                   "noisy", "noisy_equal_budget", "mitigated", "flip_rate_noisy_vs_noiseless",
+                   "flip_rate_mitigated_vs_noiseless", "abs_dev_noisy_mean", "abs_dev_mitigated_mean"],
+      "properties": {
+        "noiseless_exact": {
+          "type": "object", "required": ["raw_score", "decision"],
+          "properties": {"raw_score": {"type": "number", "minimum": 0, "maximum": 1}}
+        },
+        "noisy": {"$ref": "#/$defs/repeats"},
+        "noisy_equal_budget": {"$ref": "#/$defs/repeats"},
+        "mitigated": {
+          "allOf": [{"$ref": "#/$defs/repeats"}],
+          "required": ["negative_quasiprob_repeats", "score_out_of_range_repeats"],
+          "description": "raw mitigated scores; may lie outside [0,1] and are NOT clipped"
+        }
+      }
+    },
+    "calibrated_probability": {
+      "description": "null unless a calibrator was fitted on validation data (Role 2); must name the method",
+      "oneOf": [{"type": "null"}, {"type": "object", "required": ["method", "fitted_on", "value"]}]
+    },
+    "classical_baseline": {
+      "description": "null until Role 2 merges its baseline output for the same case",
+      "oneOf": [{"type": "null"}, {"type": "object", "required": ["model", "features_used", "score"]}]
+    },
+    "state_diagnostics": {"type": ["object", "null"]}
+  },
+  "$defs": {
+    "repeats": {
+      "type": "object",
+      "required": ["values", "mean", "std"],
+      "properties": {
+        "values": {"type": "array", "items": {"type": "number"}, "minItems": 1},
+        "mean": {"type": "number"},
+        "std": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}

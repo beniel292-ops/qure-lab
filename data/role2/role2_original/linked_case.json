@@ -1,0 +1,9 @@
+{
+  "case_id": "LIDC-IDRI-0009_1_iso0.78__s_0",
+  "patient_id": "LIDC-IDRI-0009",
+  "slice_axis": 2,
+  "slice_index": 33,
+  "ct_file": "LIDC-IDRI-0009_1_iso0.78__s_0_CT.npy",
+  "mask_file": "LIDC-IDRI-0009_1_iso0.78__s_0_nodule.npy",
+  "split": "validation"
+}
